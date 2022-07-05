@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primaryColor">#9C27B0</color>
+    <color name="primaryDarkColor">#9b0000</color>
+    <color name="secondaryColor">#3c3c3c</color>
+    <color name="secondaryDarkColor">#161616</color>
+    <color name="colorOnPrimary">#ffffff</color>
+    <color name="white">#ffffff</color>
+    <color name="purple">#B38DF6</color>
+    <color name="naglowek">#561861</color>
+    <color name="colorLight">#C1AEE4</color>
+    <color name="colorDark">#6D137C</color>
+</resources>
