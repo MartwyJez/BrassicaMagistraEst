@@ -15,4 +15,5 @@
     <string name="channels">Kanały</string>
     <string name="start_ecg_stream">Rejestracja EKG</string>
     <string name="stop_ecg_stream">Zatrzymaj rejestrację EKG</string>
+    <string name="tvIntervalChoose">Wybierz ilość interwałów w czasie badania:</string>
 </resources>

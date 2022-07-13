@@ -2,6 +2,7 @@ package edu.ib.heart
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -25,6 +26,7 @@ import com.polar.sdk.api.PolarBleApiCallback
 import com.polar.sdk.api.PolarBleApiDefaultImpl
 import com.polar.sdk.api.errors.PolarInvalidArgument
 import com.polar.sdk.api.model.*
+import ib.edu.heart.IntervalCountChooserActivity
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Single
@@ -151,6 +153,10 @@ class MainActivity : AppCompatActivity() {
 
         connectButton.text = getString(R.string.connect_to_device, deviceId)
         connectButton.setOnClickListener {
+
+            val intent = Intent(this, IntervalCountChooserActivity::class.java)
+            startActivity(intent)
+
             try {
                 if (deviceConnected) {
                     api.disconnectFromDevice(deviceId)
