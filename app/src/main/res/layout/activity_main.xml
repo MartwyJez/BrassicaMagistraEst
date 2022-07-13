@@ -48,6 +48,12 @@
             android:layout_height="wrap_content"
             android:text="@string/stop_h10_recording" />
 
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/next_layout"
+            android:text="Nastepne" />
+
 
 
         <TextView

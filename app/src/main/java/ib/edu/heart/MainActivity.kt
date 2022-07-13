@@ -2,6 +2,7 @@ package edu.ib.heart
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -24,7 +25,11 @@ import com.polar.sdk.api.PolarBleApi.DeviceStreamingFeature
 import com.polar.sdk.api.PolarBleApiCallback
 import com.polar.sdk.api.PolarBleApiDefaultImpl
 import com.polar.sdk.api.errors.PolarInvalidArgument
-import com.polar.sdk.api.model.*
+import com.polar.sdk.api.model.PolarDeviceInfo
+import com.polar.sdk.api.model.PolarExerciseEntry
+import com.polar.sdk.api.model.PolarHrData
+import com.polar.sdk.api.model.PolarSensorSetting
+import ib.edu.heart.HeartBeatActivity
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Single
@@ -34,10 +39,12 @@ import java.io.File
 import java.io.FileWriter
 import java.io.IOException
 import java.util.*
-import com.polar.sdk.api.model.PolarHrData as PolarHrData
 
 
 class MainActivity : AppCompatActivity() {
+
+
+
     companion object {
         private const val TAG = "MainActivity"
         private const val API_LOGGER_TAG = "API LOGGER"
@@ -66,6 +73,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var stopH10RecordingButton: Button
     private lateinit var readH10RecordingStatusButton: Button
     private lateinit var textView: TextView
+    private lateinit var nextLayout: Button
     private var liczba: Int = 0
     private var nagrywaj: String = ""
 
@@ -79,6 +87,7 @@ class MainActivity : AppCompatActivity() {
         startH10RecordingButton = findViewById(R.id.start_h10_recording)
         stopH10RecordingButton = findViewById(R.id.stop_h10_recording)
         readH10RecordingStatusButton = findViewById(R.id.h10_recording_status)
+        nextLayout = findViewById(R.id.next_layout)
         textView = findViewById(R.id.textv2)
         api.setPolarFilter(false)
         api.setApiLogger { s: String -> Log.d(API_LOGGER_TAG, s) }
@@ -177,6 +186,14 @@ class MainActivity : AppCompatActivity() {
                 nagrywaj = "start"
             }
         }
+
+        nextLayout.setOnClickListener {
+            intent = Intent(this, HeartBeatActivity::class.java)
+            startActivity(intent)
+
+        }
+
+
 
         stopH10RecordingButton.setOnClickListener {
             val isDisposed = recordingStartStopDisposable?.isDisposed ?: true
