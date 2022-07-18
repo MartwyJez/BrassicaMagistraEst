@@ -17,5 +17,6 @@
     <string name="stop_ecg_stream">Zatrzymaj rejestrację EKG</string>
     <string name="tvIntervalChoose">Wybierz ilość interwałów w czasie badania:</string>
     <string name="start_button">Start</string>
-    <string name="hint">Przewidywana ilość uderzeń serca</string>
+    <string name="hint">Przewidywana ilość
+        uderzeń serca</string>
 </resources>

@@ -96,7 +96,10 @@ class IntervalCountChooserActivity : AppCompatActivity() {
                 )
                 toast.show()
             }else{
-                //PRZEJSCIE DO AKTYWNOSCI Z BADANIEM
+                val intent = Intent(this, HeartBeatActivity::class.java)
+                val dataJson = ArrayListObjectParser.toJson(dataArray)
+                intent.putExtra("arrayIntervals", dataJson)
+                startActivity(intent)
             }
         }
     }

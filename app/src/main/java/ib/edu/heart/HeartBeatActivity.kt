@@ -11,12 +11,16 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import com.google.gson.Gson
+import com.google.gson.JsonArray
 import com.polar.androidblesdk.R
 import com.polar.sdk.api.PolarBleApi
 import com.polar.sdk.api.PolarBleApiCallback
 import com.polar.sdk.api.PolarBleApiDefaultImpl
 import com.polar.sdk.api.model.PolarHrData
 import java.util.*
+import kotlin.collections.ArrayList
+import com.google.gson.reflect.TypeToken as TypeToken
 
 class HeartBeatActivity : AppCompatActivity() {
 
@@ -44,7 +48,7 @@ class HeartBeatActivity : AppCompatActivity() {
     }
 
     //zamiast tego będzie przekazana lista z interwałami
-    private var intervalsTable = arrayListOf<Int>()
+    private var intervalsTable = arrayListOf<CustomListElement>()
 
     private val api: PolarBleApi by lazy {
         // Notice PolarBleApi.ALL_FEATURES are enabled
@@ -62,7 +66,12 @@ class HeartBeatActivity : AppCompatActivity() {
         submit = findViewById(R.id.submitButton)
         userTextView = findViewById(R.id.userTextView)
         //przekazane interwały
-        intervalsTable.addAll(listOf(10,20,5,15))
+
+        val data:String = intent.getStringExtra("arrayIntervals").toString()
+
+        intervalsTable = ArrayListObjectParser.fromJson(data) as ArrayList<CustomListElement>
+
+        println("HOHOHO" + intervalsTable.toString())
 
         disableEditText(userText)
 
@@ -72,7 +81,7 @@ class HeartBeatActivity : AppCompatActivity() {
         api.setApiCallback(object : PolarBleApiCallback() {
 
             override fun hrNotificationReceived(identifier: String, data: PolarHrData) {
-                Log.d(HeartBeatActivity.TAG, "HR wartosć: ${data.hr} rrsMs: ${data.rrsMs} rr: ${data.rrs} contact: ${data.contactStatus} , ${data.contactStatusSupported}")
+                Log.d(TAG, "HR wartosć: ${data.hr} rrsMs: ${data.rrsMs} rr: ${data.rrs} contact: ${data.contactStatus} , ${data.contactStatusSupported}")
                 if(running){
                     heartBeat += data.rrs.size
                 }
@@ -132,15 +141,15 @@ class HeartBeatActivity : AppCompatActivity() {
         val runnable: Runnable = object : Runnable {
             @RequiresApi(api = Build.VERSION_CODES.N)
             override fun run() {
-
+                if(intervals < intervalsTable.size) {
                 if (running) {
                     textView.text = "Licz uderzenia serca ..."
                     seconds++
                 }
                 handler.postDelayed({ this.run() }, 1000)
 
-                if(intervals < intervalsTable.size) {
-                    if (seconds == intervalsTable.get(intervals)) {
+                    println(intervals)
+                    if (seconds == intervalsTable.get(intervals).duration) {
                         running = false
                         seconds = 0
                         intervals++
@@ -150,6 +159,8 @@ class HeartBeatActivity : AppCompatActivity() {
                         enableEditText(userText)
 
                     }
+                }else{
+                    println("PRZEJDZ DO OKNA WYNIKOW")
                 }
 
             }

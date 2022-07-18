@@ -61,16 +61,12 @@ class IntervalsListAdapter(
                     Integer.parseInt(duration.text.toString())
                 ))
 
-                //println("POZYCJA PRZY ADAPTERZE: $position")
-                //println("DURATION: $durationGet")
 
                 println("W adapterze przy kliknięciu: $customElements")
 
                 if (counterChars == 0) {
                     counter += 1
 
-                    //println("COUNTEREK: $counter")
-                    //println("COUNTER CHARS: $counterChars")
                     if(counter == customElements.size) {
                         allowStart = 1
                     }
@@ -79,10 +75,11 @@ class IntervalsListAdapter(
                     allowStart = 1
                 }
                 counterChars += 1
-                //println(s.toString())
+
                 val intent = Intent("custom-message")
-                //println("ALLOWSTART $allowStart")
+
                 intent.putExtra("allow", allowStart.toString())
+
                 val gson = GsonBuilder()
                     .excludeFieldsWithModifiers(Modifier.FINAL, Modifier.TRANSIENT, Modifier.STATIC)
                     .serializeNulls()
