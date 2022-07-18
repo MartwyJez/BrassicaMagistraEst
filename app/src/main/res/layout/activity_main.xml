@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/main_gradient">
+    android:background="@drawable/backgroundnasztywno">
     tools:context="edu.ib.polar2.MainActivity">
 
     <LinearLayout
@@ -47,6 +47,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/stop_h10_recording" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/next_layout"
+            android:text="Nastepne" />
 
 
 

@@ -4,11 +4,15 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/nwosinsk/OneDrive - Capgemini/Desktop/moje projekty/heartapp/app/src/main/res/drawable/buttonshape.xml" value="0.1785" />
+        <entry key="..\:/Users/nwosinsk/OneDrive - Capgemini/Desktop/moje projekty/heartapp/app/src/main/res/drawable/gradient.xml" value="0.1965" />
         <entry key="..\:/Users/nwosinsk/OneDrive - Capgemini/Desktop/moje projekty/heartapp/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1285" />
         <entry key="..\:/Users/nwosinsk/OneDrive - Capgemini/Desktop/moje projekty/heartapp/app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.1285" />
+        <entry key="..\:/Users/nwosinsk/OneDrive - Capgemini/Desktop/moje projekty/heartapp/app/src/main/res/drawable/main_gradient.xml" value="0.326" />
+        <entry key="..\:/Users/nwosinsk/OneDrive - Capgemini/Desktop/moje projekty/heartapp/app/src/main/res/drawable/markerbg.xml" value="0.1965" />
         <entry key="..\:/Users/nwosinsk/OneDrive - Capgemini/Desktop/moje projekty/heartapp/app/src/main/res/layout/activity_interval_count_chooser.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/nwosinsk/OneDrive - Capgemini/Desktop/moje projekty/heartapp/app/src/main/res/layout/activity_main.xml" value="0.14130434782608695" />
         <entry key="..\:/Users/nwosinsk/OneDrive - Capgemini/Desktop/moje projekty/heartapp/app/src/main/res/layout/custom_listview.xml" value="0.16666666666666666" />
+        <entry key="..\:/Users/nwosinsk/OneDrive - Capgemini/Desktop/moje projekty/heartapp/app/src/main/res/layout/heart_beat_activity.xml" value="0.18854166666666666" />
         <entry key="..\:/Users/nwosinsk/OneDrive - Capgemini/Desktop/moje projekty/heartapp/app/src/main/res/layout/sensor_settings_dialog.xml" value="0.14130434782608695" />
         <entry key="..\:/Users/nwosinsk/OneDrive - Capgemini/Desktop/moje projekty/heartapp/app/src/main/res/mipmap-xxhdpi/ic_launcher.xml" value="0.1" />
         <entry key="..\:/Users/nwosinsk/OneDrive - Capgemini/Desktop/moje projekty/heartapp/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.xml" value="0.1" />

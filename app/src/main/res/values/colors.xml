@@ -10,4 +10,5 @@
     <color name="naglowek">#853444</color>
     <color name="colorLight">#C1AEE4</color>
     <color name="colorDark">#6D137C</color>
+    <color name="warning">#B11A0F</color>
 </resources>
