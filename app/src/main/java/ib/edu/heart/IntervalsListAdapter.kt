@@ -10,7 +10,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.polar.androidblesdk.R
+import java.lang.reflect.Modifier
 
 
 class IntervalsListAdapter(
@@ -22,6 +25,7 @@ class IntervalsListAdapter(
     private val customElements: ArrayList<CustomListElement>
     private var counter = 0
     private var allowStart = 0
+
 
     override fun getCount(): Int {
         return customElements.size
@@ -51,16 +55,16 @@ class IntervalsListAdapter(
         var counterChars = 0
         duration?.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                val durationGet = duration.text
-                val data: MutableMap<String, Any> = HashMap()
-                data[position.toString()] = CustomListElement(
+
+                customElements.set(position, CustomListElement(
                     customElements.get(position).countId,
-                    customElements.get(position).duration
-                )
+                    Integer.parseInt(duration.text.toString())
+                ))
+
                 //println("POZYCJA PRZY ADAPTERZE: $position")
                 //println("DURATION: $durationGet")
 
-                //println("W adapterze przy kliknięciu: $data")
+                println("W adapterze przy kliknięciu: $customElements")
 
                 if (counterChars == 0) {
                     counter += 1
@@ -79,6 +83,12 @@ class IntervalsListAdapter(
                 val intent = Intent("custom-message")
                 //println("ALLOWSTART $allowStart")
                 intent.putExtra("allow", allowStart.toString())
+                val gson = GsonBuilder()
+                    .excludeFieldsWithModifiers(Modifier.FINAL, Modifier.TRANSIENT, Modifier.STATIC)
+                    .serializeNulls()
+                    .create()
+                val json = gson.toJson(customElements.get(position))
+                intent.putExtra("elementsData", json)
 
                 LocalBroadcastManager.getInstance(context).sendBroadcast(intent)
 

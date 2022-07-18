@@ -59,9 +59,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-<<<<<<< HEAD
-=======
-
         <activity
             android:name="ib.edu.heart.HeartBeatActivity"
             android:configChanges="orientation"
@@ -73,7 +70,6 @@
             </intent-filter>
         </activity>
 
->>>>>>> origin/dev2
     </application>
 
 </manifest>

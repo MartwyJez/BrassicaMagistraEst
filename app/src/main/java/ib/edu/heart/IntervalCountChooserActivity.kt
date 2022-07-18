@@ -10,10 +10,13 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ListView
 import android.widget.Toast
-import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.google.gson.Gson
 import com.polar.androidblesdk.R
+
+import java.util.*
+
 
 class IntervalCountChooserActivity : AppCompatActivity() {
 
@@ -23,13 +26,24 @@ class IntervalCountChooserActivity : AppCompatActivity() {
     private lateinit var etIntervals: EditText
     var isAllow = 0.toString()
 
+    val dataArray = arrayListOf<CustomListElement>()
+
     private val mMessageReceiver = object : BroadcastReceiver() {
         override fun onReceive(contxt: Context?, intent: Intent?) {
             if (intent != null) {
                 when (intent.action) {
                     "custom-message" -> {
                         val ok:String = intent.getStringExtra("allow").toString()
-                        println("OKEJ: $ok")
+                        val data:String = intent.getStringExtra("elementsData").toString()
+                        val gson = Gson()
+                        var element = gson.fromJson(data, CustomListElement::class.java)
+
+                        for (item in dataArray) {
+                            if (item.countId == element.countId)
+                                dataArray.remove(item)
+                        }
+                        dataArray.add(element)
+                        println("data array: $dataArray")
                         isAllow = ok
                     }
                 }
