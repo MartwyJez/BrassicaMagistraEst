@@ -48,6 +48,16 @@
         <activity
             android:name="ib.edu.heart.IntervalCountChooserActivity"
             android:exported="false" />
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_provider_paths"/>
+        </provider>
+
         <activity
             android:name="edu.ib.heart.MainActivity"
             android:configChanges="orientation"

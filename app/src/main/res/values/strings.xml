@@ -19,4 +19,7 @@
     <string name="start_button">Start</string>
     <string name="hint">Przewidywana ilość
         uderzeń serca</string>
+    <string name="write_external_storage_permission_title">Write External Storage Permission</string>
+    <string name="write_external_storage_permission_text">Saving files required Write External Storage Permission</string>
+    <string name="btn_ok">OK</string>
 </resources>
