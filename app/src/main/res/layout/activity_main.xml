@@ -1,69 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/main_gradient">
-    tools:context="edu.ib.polar2.MainActivity">
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:background="@drawable/backgroundnawszystko">
+tools:context="edu.ib.polar2.MainActivity">
 
-    <LinearLayout
+<LinearLayout
 
-        android:id="@+id/buttons_container"
+    android:id="@+id/buttons_container"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_gravity="center"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:text="POLAR HEART APP"
+        android:textColor="#d45f73"
+        android:textSize="30dp" />
+
+    <Button
+        android:id="@+id/connect_button"
+        android:layout_width="273dp"
+        android:layout_height="wrap_content"
+        android:text="TESTOWA AKTYWNOSC" />
+
+    <Button
+        android:id="@+id/h10_recording_status"
+        android:layout_width="275dp"
+        android:layout_height="wrap_content"
+        android:text="@string/h10_recording_status" />
+
+
+    <Button
+        android:id="@+id/start_h10_recording"
+        android:layout_width="275dp"
+        android:layout_height="wrap_content"
+        android:text="@string/start_h10_recording" />
+
+
+    <Button
+        android:id="@+id/stop_h10_recording"
+        android:layout_width="275dp"
+        android:layout_height="wrap_content"
+        android:text="@string/stop_h10_recording" />
+
+    <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:orientation="vertical">
+        android:id="@+id/next_layout"
+        android:text="Nastepne" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal"
-            android:text="Polar Heart App"
-            android:textColor="@color/naglowek"
-            android:textSize="30dp" />
-
-        <Button
-            android:id="@+id/connect_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/connect_to_device"
-            />
-        <Button
-            android:id="@+id/h10_recording_status"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/h10_recording_status" />
-
-
-        <Button
-            android:id="@+id/start_h10_recording"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/start_h10_recording" />
-
-        <Button
-            android:id="@+id/stop_h10_recording"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/stop_h10_recording" />
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/next_layout"
-            android:text="Nastepne" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textv2"
+        android:text=""
+        android:textSize="20dp"
+        />
 
 
 
-        <TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:id="@+id/textv2"
-    android:text=""
-            android:textSize="20dp"
-    />
 
-
-    </LinearLayout>
+</LinearLayout>
 </ScrollView>

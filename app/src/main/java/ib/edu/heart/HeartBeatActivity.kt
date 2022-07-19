@@ -1,5 +1,6 @@
 package ib.edu.heart
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -28,7 +29,7 @@ class HeartBeatActivity : AppCompatActivity() {
 
     private var sensorRecord = arrayListOf<Int>()
 
-    private var userRecord = arrayListOf<String>()
+    private var userRecord = arrayListOf<Int>()
 
     private lateinit var textView: TextView
     private lateinit var userTextView: TextView
@@ -62,7 +63,7 @@ class HeartBeatActivity : AppCompatActivity() {
         submit = findViewById(R.id.submitButton)
         userTextView = findViewById(R.id.userTextView)
         //przekazane interwały
-        intervalsTable.addAll(listOf(10,20,5,15))
+        intervalsTable.addAll(listOf(5,5))
 
         disableEditText(userText)
 
@@ -92,11 +93,23 @@ class HeartBeatActivity : AppCompatActivity() {
         }
 
         submit.setOnClickListener {
-            userRecord.add(userText.text.toString())
+            userRecord.add(Integer.parseInt(userText.text.toString()))
             println(userRecord.toString())
             disableEditText(userText)
             userText.text.clear()
+
+            if (userRecord.size == intervalsTable.size){
+                intent = Intent(this, Data::class.java)
+                val bundle = Bundle()
+                bundle.putIntegerArrayList("user", userRecord)
+                bundle.putIntegerArrayList("sensor", sensorRecord)
+                intent.putExtras(bundle)
+                startActivity(intent)
+
+            }
         }
+
+
 
 
 
@@ -116,12 +129,16 @@ class HeartBeatActivity : AppCompatActivity() {
 
     private fun enableEditText(editText: EditText) {
         userTextView.text = "Wpisz przewidywaną ilość uderzeń serca"
+        userTextView.width = 700
         editText.isFocusableInTouchMode = true
         editText.isFocusable = true
         editText.isEnabled = true
         editText.isCursorVisible = true
-        editText.setBackgroundColor(Color.WHITE)
+        editText.setBackgroundResource(R.drawable.border)
+        editText.hint = "Ilość uderzeń serca"
+        editText.width = 275
         submit.visibility = View.VISIBLE
+        submit.width = 275
 
     }
 
@@ -152,11 +169,16 @@ class HeartBeatActivity : AppCompatActivity() {
                     }
                 }
 
+
             }
 
 
         }
+
+
         handler.postDelayed(runnable, 1000)
+
+
     }
 
 

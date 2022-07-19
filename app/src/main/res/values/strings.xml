@@ -16,5 +16,5 @@
     <string name="start_ecg_stream">Rejestracja EKG</string>
     <string name="stop_ecg_stream">Zatrzymaj rejestrację EKG</string>
     <string name="start_button">Start</string>
-    <string name="hint">Przewidywana ilość uderzeń serca</string>
+    <string name="hint">Ilość uderzeń serca</string>
 </resources>
