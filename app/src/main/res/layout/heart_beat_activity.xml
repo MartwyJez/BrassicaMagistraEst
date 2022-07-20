@@ -14,20 +14,23 @@
         android:layout_gravity="center"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
+        android:gravity="center"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/status"
-            android:layout_width="275dp"
-            android:layout_height="82dp"
-            android:layout_gravity="center_vertical"
+            android:layout_width="232dp"
+            android:textAlignment="center"
+            android:layout_height="63dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="50dp"
             android:text="Oczekiwanie na rozpoczęcie badania ..."
-            android:textColor="@color/warning"
+            android:textColor="@color/primaryDarkColor"
             android:textSize="23dp" />
 
         <Button
             android:id="@+id/start_button"
-            android:layout_width="273dp"
+            android:layout_width="216dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:text="@string/start_button" />
@@ -43,28 +46,25 @@
 
         <EditText
             android:id="@+id/userHeartBeat"
-            android:layout_width="275dp"
-            android:layout_height="match_parent"
+            android:layout_width="221dp"
+            android:layout_height="51dp"
             android:layout_marginTop="10dp"
+            android:background="@color/colorOnPrimary"
             android:hint="@string/hint"
             android:inputType="numberSigned"
+            android:textAlignment="center"
             android:textColor="@color/secondaryDarkColor"
             android:textColorHint="@color/purple"
-            android:background="@drawable/border"
             android:textSize="20dp"
-
             />
 
         <Button
             android:id="@+id/submitButton"
-            android:layout_width="275dp"
-            android:layout_height="match_parent"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
             android:text="Zatwierdź"
 
             />
-
-
-
 
     </LinearLayout>
 </ScrollView>

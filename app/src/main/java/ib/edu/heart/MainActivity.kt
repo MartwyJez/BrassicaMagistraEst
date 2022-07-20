@@ -25,11 +25,16 @@ import com.polar.sdk.api.PolarBleApi.DeviceStreamingFeature
 import com.polar.sdk.api.PolarBleApiCallback
 import com.polar.sdk.api.PolarBleApiDefaultImpl
 import com.polar.sdk.api.errors.PolarInvalidArgument
+
+import com.polar.sdk.api.model.*
+import ib.edu.heart.IntervalCountChooserActivity
+
 import com.polar.sdk.api.model.PolarDeviceInfo
 import com.polar.sdk.api.model.PolarExerciseEntry
 import com.polar.sdk.api.model.PolarHrData
 import com.polar.sdk.api.model.PolarSensorSetting
 import ib.edu.heart.HeartBeatActivity
+
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Single
@@ -160,6 +165,10 @@ class MainActivity : AppCompatActivity() {
 
         connectButton.text = getString(R.string.connect_to_device, deviceId)
         connectButton.setOnClickListener {
+
+            val intent = Intent(this, IntervalCountChooserActivity::class.java)
+            startActivity(intent)
+
             try {
                 if (deviceConnected) {
                     api.disconnectFromDevice(deviceId)

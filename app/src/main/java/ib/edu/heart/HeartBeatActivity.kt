@@ -20,16 +20,20 @@ import com.polar.sdk.api.model.PolarHrData
 import java.util.*
 
 class HeartBeatActivity : AppCompatActivity() {
-
+    private var mCsvLogger: CsvLogger? = null
     private var seconds = 0
     private var running = false
     private var intervals = 0
     private var heartBeat = 0
     private val waiting = "Oczekiwanie na rozpoczęcie badania ..."
-
+    private var isLogSaved = false
     private var sensorRecord = arrayListOf<Int>()
 
     private var userRecord = arrayListOf<Int>()
+
+   // private var userRecord = arrayListOf<String>()
+
+    private val LOG_TAG: String = HeartBeatActivity::class.java.simpleName
 
     private lateinit var textView: TextView
     private lateinit var userTextView: TextView
@@ -45,7 +49,7 @@ class HeartBeatActivity : AppCompatActivity() {
     }
 
     //zamiast tego będzie przekazana lista z interwałami
-    private var intervalsTable = arrayListOf<Int>()
+    private var intervalsTable = arrayListOf<CustomListElement>()
 
     private val api: PolarBleApi by lazy {
         // Notice PolarBleApi.ALL_FEATURES are enabled
@@ -62,18 +66,22 @@ class HeartBeatActivity : AppCompatActivity() {
         userText = findViewById(R.id.userHeartBeat)
         submit = findViewById(R.id.submitButton)
         userTextView = findViewById(R.id.userTextView)
-        //przekazane interwały
-        intervalsTable.addAll(listOf(5,5))
+
+        mCsvLogger = CsvLogger()
+        val data:String = intent.getStringExtra("arrayIntervals").toString()
+        mCsvLogger!!.checkRuntimeWriteExternalStoragePermission(this, this)
+        intervalsTable = ArrayListObjectParser.fromJson(data) as ArrayList<CustomListElement>
+
 
         disableEditText(userText)
 
-
+        mCsvLogger!!.appendHeader("Lp., Interval [ms], User expectations, Real EKG score")
 
         api.setApiLogger { s: String -> Log.d(HeartBeatActivity.API_LOGGER_TAG, s) }
         api.setApiCallback(object : PolarBleApiCallback() {
 
             override fun hrNotificationReceived(identifier: String, data: PolarHrData) {
-                Log.d(HeartBeatActivity.TAG, "HR wartosć: ${data.hr} rrsMs: ${data.rrsMs} rr: ${data.rrs} contact: ${data.contactStatus} , ${data.contactStatusSupported}")
+                Log.d(TAG, "HR wartosć: ${data.hr} rrsMs: ${data.rrsMs} rr: ${data.rrs} contact: ${data.contactStatus} , ${data.contactStatusSupported}")
                 if(running){
                     heartBeat += data.rrs.size
                 }
@@ -89,12 +97,28 @@ class HeartBeatActivity : AppCompatActivity() {
 
 
         buttonStart.setOnClickListener {
+            isLogSaved = false
             running = true
         }
+        var i = 0
 
         submit.setOnClickListener {
             userRecord.add(Integer.parseInt(userText.text.toString()))
-            println(userRecord.toString())
+//            userRecord.add(userText.text.toString())
+            mCsvLogger!!.appendLine(
+                String.format(
+                    Locale.getDefault(),
+                    "%s,%s,%s,%s", (i + 1).toString(), intervalsTable.get(i).duration.toString(), userRecord[i].toString(),
+                    heartBeat.toString()
+                )
+            )
+            i++
+            if(intervals == intervalsTable.size) {
+                if (!isLogSaved) {
+                    mCsvLogger!!.finishSavingLogs(this, LOG_TAG)
+                    isLogSaved = true
+                }
+            }
             disableEditText(userText)
             userText.text.clear()
 
@@ -109,13 +133,8 @@ class HeartBeatActivity : AppCompatActivity() {
             }
         }
 
+        }
 
-
-
-
-
-
-    }
 
     private fun disableEditText(editText: EditText) {
         userTextView.text = ""
@@ -149,24 +168,28 @@ class HeartBeatActivity : AppCompatActivity() {
         val runnable: Runnable = object : Runnable {
             @RequiresApi(api = Build.VERSION_CODES.N)
             override fun run() {
-
+                if(intervals < intervalsTable.size) {
                 if (running) {
                     textView.text = "Licz uderzenia serca ..."
                     seconds++
                 }
                 handler.postDelayed({ this.run() }, 1000)
 
-                if(intervals < intervalsTable.size) {
-                    if (seconds == intervalsTable.get(intervals)) {
+
+                    if (seconds == intervalsTable.get(intervals).duration) {
                         running = false
                         seconds = 0
                         intervals++
                         sensorRecord.add(heartBeat)
+                        println(sensorRecord.toString())
                         heartBeat = 0
                         textView.text = "Interwał zakończony. Wpisz ilość uderzeń serca i wystartuj kolejny interwał"
                         enableEditText(userText)
 
                     }
+                }else{
+
+                    println("PRZEJDZ DO OKNA WYNIKOW")
                 }
 
 

@@ -15,6 +15,10 @@
     <string name="channels">Kanały</string>
     <string name="start_ecg_stream">Rejestracja EKG</string>
     <string name="stop_ecg_stream">Zatrzymaj rejestrację EKG</string>
+    <string name="tvIntervalChoose">Wybierz ilość interwałów w czasie badania:</string>
     <string name="start_button">Start</string>
     <string name="hint">Ilość uderzeń serca</string>
+    <string name="write_external_storage_permission_title">Write External Storage Permission</string>
+    <string name="write_external_storage_permission_text">Saving files required Write External Storage Permission</string>
+    <string name="btn_ok">OK</string>
 </resources>

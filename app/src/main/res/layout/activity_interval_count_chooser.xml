@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="ib.edu.heart.IntervalCountChooserActivity"
+    android:background="@drawable/backgroundnasztywno">
+
+    <Button
+        android:id="@+id/btnSubmitInterval"
+        android:layout_width="248dp"
+        android:layout_height="54dp"
+        android:layout_marginTop="36dp"
+        android:background="@drawable/buttonshape"
+        android:text="Zatwierdź"
+
+        android:textColor="@color/white"
+        android:textSize="16dp"
+        android:typeface="sans"
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etIntervalCount"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/btnSubmitInterval2"
+        android:layout_width="283dp"
+        android:layout_height="72dp"
+        android:background="@android:color/transparent"
+        android:text="Przejdź do pomiaru"
+        android:textColor="@color/white"
+        android:textSize="23dp"
+        android:typeface="sans"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.453"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/listIntervals"
+        app:layout_constraintVertical_bias="0.94" />
+
+    <EditText
+        android:id="@+id/etIntervalCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/primaryColor"
+        android:ems="12"
+        android:inputType="textPersonName"
+        android:hint="Ilość interwałów"
+        android:textColorHint="@color/primaryColor"
+        android:textAlignment="center"
+        android:textColor="@color/primaryColor"
+
+        android:typeface="sans"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.506"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvIntervalChoose"
+        app:layout_constraintVertical_bias="0.043" />
+
+    <TextView
+        android:id="@+id/tvIntervalChoose"
+        android:layout_width="270dp"
+        android:layout_height="71dp"
+        android:text="@string/tvIntervalChoose"
+        android:textAlignment="center"
+        android:textColor="#309c7f"
+        android:textSize="21dp"
+        android:typeface="sans"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.101" />
+
+    <ListView
+        android:id="@+id/listIntervals"
+        android:layout_width="245dp"
+        android:layout_height="201dp"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnSubmitInterval"
+        app:layout_constraintVertical_bias="0.192" />
+</androidx.constraintlayout.widget.ConstraintLayout>
