@@ -5,6 +5,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ArrayListObjectParser {
 
@@ -17,6 +18,14 @@ public class ArrayListObjectParser {
         }.getType();
 
         ArrayList<CustomListElement> list = (ArrayList<CustomListElement>) new Gson().fromJson(jsonString, type);
+        return list;
+    }
+
+    public static Object fromJsonInt(String jsonString) {
+        Type type = new TypeToken<List<Integer>>() {
+        }.getType();
+
+        List<Integer> list = (List<Integer>) new Gson().fromJson(jsonString, type);
         return list;
     }
 

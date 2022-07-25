@@ -40,14 +40,14 @@
         android:stretchColumns="0,1">
 
         <TableRow
-            android:background="#FFFFFF"
+            android:background="#E6E6E6"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
             android:layout_margin="1dp"
             android:layout_weight="1"
             >
             <TableRow
-                android:background="#000000"
+                android:background="#979797"
                 android:layout_width="fill_parent"
                 android:layout_height="0dp"
                 android:layout_margin="1dp"
@@ -59,7 +59,7 @@
             </TableRow>
         </TableRow>
         <TableRow
-            android:background="#000000"
+            android:background="#979797"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
             android:layout_margin="1dp"
@@ -74,7 +74,7 @@
                 android:text="Użytkownik "
                 android:layout_margin="1dp"
                 android:layout_column="0"
-                android:background="#FFFFFF"
+                android:background="#E6E6E6"
                 android:gravity="center"
                 android:textStyle="bold"
                 android:textColor="@color/naglowek"
@@ -87,7 +87,7 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="Czujnik"
                 android:layout_margin="1dp"
-                android:background="#FFFFFF"
+                android:background="#E6E6E6"
                 android:gravity="center"
                 android:textStyle="bold"
                 android:layout_column="1"
@@ -97,7 +97,7 @@
         </TableRow>
 
         <TableRow
-            android:background="#000000"
+            android:background="#979797"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
             android:layout_margin="1dp"
@@ -111,12 +111,12 @@
                 android:layout_height="match_parent"
                 android:layout_column="0"
                 android:layout_margin="1dp"
-                android:background="#FFFFFF"
+                android:background="#E6E6E6"
                 android:gravity="center"
                 android:maxLines="50"
                 android:text=" Text"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="@color/naglowek"
+                android:textColor="@color/primaryColor"
 
 
                 />
@@ -128,13 +128,26 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text=" Text"
                 android:layout_margin="1dp"
-                android:background="#FFFFFF"
-                android:textColor="@color/naglowek"
+                android:background="#E6E6E6"
+                android:textColor="@color/primaryColor"
                 android:gravity="center"
                 android:layout_column="1"
                 android:maxLines="50"
                 />
         </TableRow>
+
+
+        <Button
+            android:id="@+id/reset"
+            android:layout_width="275dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:text="Przejdź do strony głównej"
+
+            />
+
+
 
 
 

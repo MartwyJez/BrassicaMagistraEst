@@ -2,18 +2,22 @@ package ib.edu.heart
 
 import android.R
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.TableLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.google.gson.Gson
+import edu.ib.heart.MainActivity
 
 
 class Data: AppCompatActivity() {
 
 
     private lateinit var dataBtn: Button
+    private lateinit var resetBtn: Button
     private lateinit var user: TextView
     private lateinit var sensor: TextView
 
@@ -25,52 +29,22 @@ class Data: AppCompatActivity() {
 
         val tl = findViewById<View>(com.polar.androidblesdk.R.id.table) as TableLayout
         tl.visibility =  View.INVISIBLE
+        resetBtn = findViewById(com.polar.androidblesdk.R.id.reset)
 
-        val bundle: Bundle? = intent.extras
-        val userRec = bundle?.get("user")
-        val sensorRec = bundle?.get("sensor")
+        val ok:String = intent.getStringExtra("user").toString()
+        val data:String = intent.getStringExtra("sensor").toString()
+        val gson = Gson()
+        var sensorVal = gson.fromJson(data, Array<Int>::class.java)
 
-        val uvals = ArrayList<Float>()
-        var udata = userRec.toString().replace("[", "").replace("]","")
+        val gson1 = Gson()
+        var userVal = gson1.fromJson(ok, Array<Int>::class.java)
 
-        var indexes = 0
-        var indexes2 = 0
+        val dataArrayInt = arrayListOf<Int>()
 
-        while(indexes2 < udata.length){
-            indexes2 = udata.indexOf(",")
-            if(indexes2 >= 0){
-                val wartosc : String = udata.subSequence(indexes, indexes2) as String
-                uvals.add(wartosc.toFloat())
-                udata = udata.substring(0, indexes2).plus("").plus(udata.substring(indexes2 + 1))
-                indexes = indexes2
-            }
-            else{
-                val wartosc : String = udata.subSequence(indexes, udata.length) as String
-                uvals.add(wartosc.toFloat())
-                break
-            }
-        }
+        resetBtn.visibility = View.INVISIBLE
 
-        val svals = ArrayList<Float>()
-        var sdata = userRec.toString().replace("[", "").replace("]","")
 
-        var indexes3 = 0
-        var indexes4 = 0
 
-        while(indexes3 < sdata.length){
-            indexes4 = sdata.indexOf(",")
-            if(indexes4 >= 0){
-                val wartosc : String = sdata.subSequence(indexes3, indexes4) as String
-                svals.add(wartosc.toFloat())
-                sdata = sdata.substring(0, indexes4).plus("").plus(sdata.substring(indexes4 + 1))
-                indexes3 = indexes4
-            }
-            else{
-                val wartosc : String = sdata.subSequence(indexes3, sdata.length) as String
-                svals.add(wartosc.toFloat())
-                break
-            }
-        }
 
         dataBtn = findViewById(com.polar.androidblesdk.R.id.viewTable)
         user = findViewById(com.polar.androidblesdk.R.id.user)
@@ -86,19 +60,31 @@ class Data: AppCompatActivity() {
             var str1 = ""
             var str2 = ""
 
+            println(sensorVal.toString())
 
-
-            for (i in 0..svals.size) {
-                str1 += udata.get(i).toString() + "\n"
-                str2 += sdata.get(i).toString() + "\n"
+            for (i in 0..sensorVal.size-1){
+                str1 += userVal.get(i).toString() + "\n"
+                str2 += sensorVal.get(i).toString() + "\n"
             }
 
             user.text = str1
             sensor.text = str2
 
+            resetBtn.visibility = View.VISIBLE
+
 
 
         }
+
+        resetBtn.setOnClickListener {
+
+            intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+
+
+        }
+
+
 
 
 

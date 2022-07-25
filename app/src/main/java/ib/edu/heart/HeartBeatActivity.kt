@@ -12,11 +12,13 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import com.google.gson.GsonBuilder
 import com.polar.androidblesdk.R
 import com.polar.sdk.api.PolarBleApi
 import com.polar.sdk.api.PolarBleApiCallback
 import com.polar.sdk.api.PolarBleApiDefaultImpl
 import com.polar.sdk.api.model.PolarHrData
+import java.lang.reflect.Modifier
 import java.util.*
 
 class HeartBeatActivity : AppCompatActivity() {
@@ -109,7 +111,7 @@ class HeartBeatActivity : AppCompatActivity() {
                 String.format(
                     Locale.getDefault(),
                     "%s,%s,%s,%s", (i + 1).toString(), intervalsTable.get(i).duration.toString(), userRecord[i].toString(),
-                    heartBeat.toString()
+                    sensorRecord[i].toString()
                 )
             )
             i++
@@ -122,12 +124,26 @@ class HeartBeatActivity : AppCompatActivity() {
             disableEditText(userText)
             userText.text.clear()
 
+            intent = Intent(this, Data::class.java)
+
             if (userRecord.size == intervalsTable.size){
-                intent = Intent(this, Data::class.java)
-                val bundle = Bundle()
-                bundle.putIntegerArrayList("user", userRecord)
-                bundle.putIntegerArrayList("sensor", sensorRecord)
-                intent.putExtras(bundle)
+                val gson = GsonBuilder()
+                    .excludeFieldsWithModifiers(Modifier.FINAL, Modifier.TRANSIENT, Modifier.STATIC)
+                    .serializeNulls()
+                    .create()
+                val json = gson.toJson(userRecord)
+
+                intent.putExtra("user", json)
+
+                val gson1 = GsonBuilder()
+                    .excludeFieldsWithModifiers(Modifier.FINAL, Modifier.TRANSIENT, Modifier.STATIC)
+                    .serializeNulls()
+                    .create()
+                val json1 = gson1.toJson(sensorRecord)
+
+                intent.putExtra("sensor", json1)
+
+
                 startActivity(intent)
 
             }

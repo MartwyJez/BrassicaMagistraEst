@@ -20,11 +20,11 @@
         <TextView
             android:id="@+id/status"
             android:layout_width="232dp"
-            android:textAlignment="center"
-            android:layout_height="63dp"
+            android:layout_height="141dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="50dp"
             android:text="Oczekiwanie na rozpoczęcie badania ..."
+            android:textAlignment="center"
             android:textColor="@color/primaryDarkColor"
             android:textSize="23dp" />
 
@@ -42,6 +42,7 @@
             android:layout_marginTop="30dp"
             android:text=""
             android:textColor="@color/naglowek"
+            android:maxLines= "10"
             android:textSize="20dp" />
 
         <EditText
@@ -49,12 +50,11 @@
             android:layout_width="221dp"
             android:layout_height="51dp"
             android:layout_marginTop="10dp"
-            android:background="@color/colorOnPrimary"
             android:hint="@string/hint"
             android:inputType="numberSigned"
             android:textAlignment="center"
-            android:textColor="@color/secondaryDarkColor"
-            android:textColorHint="@color/purple"
+            android:textColor="@color/primaryColor"
+            android:textColorHint="@color/primaryColor"
             android:textSize="20dp"
             />
 

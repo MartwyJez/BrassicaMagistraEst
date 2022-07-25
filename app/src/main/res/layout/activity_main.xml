@@ -29,33 +29,9 @@ tools:context="edu.ib.polar2.MainActivity">
         android:id="@+id/connect_button"
         android:layout_width="273dp"
         android:layout_height="wrap_content"
-        android:text="TESTOWA AKTYWNOSC" />
-
-    <Button
-        android:id="@+id/h10_recording_status"
-        android:layout_width="275dp"
-        android:layout_height="wrap_content"
-        android:text="@string/h10_recording_status" />
+        android:text="Rozpocznij badanie" />
 
 
-    <Button
-        android:id="@+id/start_h10_recording"
-        android:layout_width="275dp"
-        android:layout_height="wrap_content"
-        android:text="@string/start_h10_recording" />
-
-
-    <Button
-        android:id="@+id/stop_h10_recording"
-        android:layout_width="275dp"
-        android:layout_height="wrap_content"
-        android:text="@string/stop_h10_recording" />
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/next_layout"
-        android:text="Nastepne" />
 
     <TextView
         android:layout_width="match_parent"

@@ -74,11 +74,8 @@ class MainActivity : AppCompatActivity() {
     private var exerciseEntries: MutableList<PolarExerciseEntry> = mutableListOf()
 
     private lateinit var connectButton: Button
-    private lateinit var startH10RecordingButton: Button
-    private lateinit var stopH10RecordingButton: Button
-    private lateinit var readH10RecordingStatusButton: Button
     private lateinit var textView: TextView
-    private lateinit var nextLayout: Button
+
     private var liczba: Int = 0
     private var nagrywaj: String = ""
 
@@ -89,10 +86,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         Log.d(TAG, "version: " + PolarBleApiDefaultImpl.versionInfo())
         connectButton = findViewById(R.id.connect_button)
-        startH10RecordingButton = findViewById(R.id.start_h10_recording)
-        stopH10RecordingButton = findViewById(R.id.stop_h10_recording)
-        readH10RecordingStatusButton = findViewById(R.id.h10_recording_status)
-        nextLayout = findViewById(R.id.next_layout)
         textView = findViewById(R.id.textv2)
         api.setPolarFilter(false)
         api.setApiLogger { s: String -> Log.d(API_LOGGER_TAG, s) }
@@ -185,77 +178,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        startH10RecordingButton.setOnClickListener {
-            val isDisposed = recordingStartStopDisposable?.isDisposed ?: true
-            if (isDisposed) {
-                val recordIdentifier = "TEST_APP_ID"
-                val recordingStartOk = "Rozpoczął sie zapis danych o id $recordIdentifier"
-                Log.d(TAG, "recordingStartOk")
-                showSnackbar(recordingStartOk)
-                nagrywaj = "start"
-            }
-        }
-
-        nextLayout.setOnClickListener {
-            intent = Intent(this, HeartBeatActivity::class.java)
-            startActivity(intent)
-
-        }
-
-
-
-        stopH10RecordingButton.setOnClickListener {
-            val isDisposed = recordingStartStopDisposable?.isDisposed ?: true
-            if (isDisposed) {
-                val recordingStopOk = "Zatrzymano rejestracje"
-                Log.d(TAG, "recordingStopOk")
-                showSnackbar(recordingStopOk)
-                nagrywaj = "stop"
-                textView.text = liczba.toString()
-                liczba = 0
-
-            }
-        }
-
-        readH10RecordingStatusButton.setOnClickListener {
-            val isDisposed = recordingStatusReadDisposable?.isDisposed ?: true
-            if (isDisposed) {
-                recordingStatusReadDisposable = api.requestRecordingStatus(deviceId)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(
-                        { pair: Pair<Boolean, String> ->
-
-                            val recordingOn = pair.first
-                            val recordingId = pair.second
-
-                            val recordingStatus = if (!recordingOn && recordingId.isEmpty()) {
-                                "Status: rejestracja wyłączona"
-                            } else if (!recordingOn && recordingId.isNotEmpty()) {
-                                "Status: rejestracja wyłączona\n\n" +
-                                        "Zapis o id $recordingId jest zapisany na urządzeniu"
-                            } else if (recordingOn && recordingId.isNotEmpty()) {
-                                "Status: rejestracja jest włączona\n\n" +
-                                        "Zapis o id $recordingId jest rejestrowany"
-                            } else if (recordingOn && recordingId.isEmpty()) {
-                                "Status czujnika jest nie określony"
-                            } else {
-                                // This state is unreachable and should never happen
-                                "Status: BŁĄD"
-                            }
-                            Log.d(TAG, recordingStatus)
-                            showDialog("Status urządzenia", recordingStatus)
-                        },
-                        { error: Throwable ->
-                            val recordingStatusReadError = "Nie udało się wczytać statusu urządznia. Reason: $error"
-                            Log.e(TAG, recordingStatusReadError)
-                            showSnackbar(recordingStatusReadError)
-                        }
-                    )
-            } else {
-                Log.d(TAG, "Żądanie statusu rejestracji jest już w toku.")
-            }
-        }
-
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -271,32 +193,6 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    fun writeDataAtOnce(filePath: String?) {
-
-        // first create file object for file placed at location
-        // specified by filepath
-        val file = File(filePath)
-        try {
-            // create FileWriter object with file as parameter
-            val outputfile = FileWriter(file)
-
-            // create CSVWriter object filewriter object as parameter
-            val writer = CSVWriter(outputfile)
-
-            // create a List which contains String array
-            val data: MutableList<Array<String>> = ArrayList()
-            data.add(arrayOf("Name", "Class", "Marks"))
-            data.add(arrayOf("Aman", "10", "620"))
-            data.add(arrayOf("Suraj", "10", "630"))
-            writer.writeAll(data)
-
-            // closing writer connection
-            writer.close()
-        } catch (e: IOException) {
-            // TODO Auto-generated catch block
-            e.printStackTrace()
-        }
-    }
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == PERMISSION_REQUEST_CODE) {
@@ -423,17 +319,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun disableAllButtons() {
         connectButton.isEnabled = false
-        startH10RecordingButton.isEnabled = false
-        stopH10RecordingButton.isEnabled = false
-        readH10RecordingStatusButton.isEnabled = false
+
 
     }
 
     private fun enableAllButtons() {
         connectButton.isEnabled = true
-        startH10RecordingButton.isEnabled = true
-        stopH10RecordingButton.isEnabled = true
-        readH10RecordingStatusButton.isEnabled = true
+
     }
     private fun disposeAllStreams() {
        }

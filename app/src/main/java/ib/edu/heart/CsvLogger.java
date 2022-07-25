@@ -65,8 +65,8 @@ public class CsvLogger {
 
     public File createLogFile(String sensorName) {
         if (isExternalStorageWritable()) {
-            File externalDirectory = Environment.getExternalStorageDirectory();
-            File appDirectory = new File(externalDirectory, "PolarHeartApp");
+            //File externalDirectory = Environment.getExternalStorageDirectory();
+            File appDirectory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "PolarHeartApp");
             File logFile = new File(appDirectory, createFileName(sensorName) + ".csv");
 
             System.out.println(appDirectory.getAbsolutePath());
