@@ -20,6 +20,8 @@ class Data: AppCompatActivity() {
     private lateinit var resetBtn: Button
     private lateinit var user: TextView
     private lateinit var sensor: TextView
+    private lateinit var interval: TextView
+
 
 
     @SuppressLint("StringFormatInvalid")
@@ -33,6 +35,11 @@ class Data: AppCompatActivity() {
 
         val ok:String = intent.getStringExtra("user").toString()
         val data:String = intent.getStringExtra("sensor").toString()
+
+        val values = intent.getStringExtra("dataArray").toString()
+        val gson3 = Gson()
+        val values1 = gson3.fromJson(values, Array<CustomListElement>::class.java)
+
         val gson = Gson()
         var sensorVal = gson.fromJson(data, Array<Int>::class.java)
 
@@ -45,7 +52,7 @@ class Data: AppCompatActivity() {
 
 
 
-
+        interval = findViewById(com.polar.androidblesdk.R.id.interval)
         dataBtn = findViewById(com.polar.androidblesdk.R.id.viewTable)
         user = findViewById(com.polar.androidblesdk.R.id.user)
         sensor = findViewById(com.polar.androidblesdk.R.id.sensor)
@@ -59,16 +66,19 @@ class Data: AppCompatActivity() {
 
             var str1 = ""
             var str2 = ""
+            var str3 = ""
 
             println(sensorVal.toString())
 
             for (i in 0..sensorVal.size-1){
                 str1 += userVal.get(i).toString() + "\n"
                 str2 += sensorVal.get(i).toString() + "\n"
+                str3 += values1.get(i).duration.toString() + " sek \n"
             }
 
             user.text = str1
             sensor.text = str2
+            interval.text = str3
 
             resetBtn.visibility = View.VISIBLE
 

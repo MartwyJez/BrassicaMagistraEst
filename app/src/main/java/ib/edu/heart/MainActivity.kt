@@ -34,6 +34,7 @@ import com.polar.sdk.api.model.PolarExerciseEntry
 import com.polar.sdk.api.model.PolarHrData
 import com.polar.sdk.api.model.PolarSensorSetting
 import ib.edu.heart.HeartBeatActivity
+import ib.edu.heart.SettingsActivity
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Flowable
@@ -74,6 +75,7 @@ class MainActivity : AppCompatActivity() {
     private var exerciseEntries: MutableList<PolarExerciseEntry> = mutableListOf()
 
     private lateinit var connectButton: Button
+    private lateinit var settButton: Button
     private lateinit var textView: TextView
 
     private var liczba: Int = 0
@@ -86,6 +88,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         Log.d(TAG, "version: " + PolarBleApiDefaultImpl.versionInfo())
         connectButton = findViewById(R.id.connect_button)
+        settButton = findViewById(R.id.settings)
         textView = findViewById(R.id.textv2)
         api.setPolarFilter(false)
         api.setApiLogger { s: String -> Log.d(API_LOGGER_TAG, s) }
@@ -176,6 +179,13 @@ class MainActivity : AppCompatActivity() {
                 }
                 Log.e(TAG, "Nie udało się $attempt. Reason $polarInvalidArgument ")
             }
+        }
+
+        settButton.setOnClickListener {
+
+            val intent = Intent(this, SettingsActivity::class.java)
+            startActivity(intent)
+
         }
 
 

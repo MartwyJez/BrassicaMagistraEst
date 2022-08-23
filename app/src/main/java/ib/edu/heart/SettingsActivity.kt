@@ -1,31 +1,35 @@
 package ib.edu.heart
 
+import android.app.AlertDialog
+import android.app.Dialog
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
 import android.text.InputType
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ListView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.gson.Gson
 import com.polar.androidblesdk.R
-import java.util.*
+import edu.ib.heart.MainActivity
 
 
-class IntervalCountChooserActivity : AppCompatActivity() {
+class SettingsActivity : AppCompatActivity() {
 
     private lateinit var submitInterval: Button
+    private lateinit var show: Button
     private lateinit var submitIntervalWhole: Button
-    private lateinit var defaulSett: Button
     private var intervalsListAdapter: IntervalsListAdapter? = null
     private lateinit var etIntervals: EditText
-    private lateinit var txt: TextView
+    private lateinit var databaseHelper: DatabaseHelper
     var isAllow = 0.toString()
 
-    private lateinit var databaseHelper: DatabaseHelper
-    val dataArray = arrayListOf<CustomListElement>()
+    var dataArray = arrayListOf<CustomListElement>()
 
     private val mMessageReceiver = object : BroadcastReceiver() {
         override fun onReceive(contxt: Context?, intent: Intent?) {
@@ -61,17 +65,17 @@ class IntervalCountChooserActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_interval_count_chooser)
+        setContentView(R.layout.settings)
 
         databaseHelper = DatabaseHelper(this)
+
+        show = findViewById(R.id.btnShow)
 
         etIntervals = findViewById(R.id.etIntervalCount)
         setInputTypeNumber()
         listview = findViewById<ListView>(R.id.listIntervals)
-        txt  = findViewById(R.id.tvIntervalChoose)
         submitInterval = findViewById<Button>(R.id.btnSubmitInterval)
         submitIntervalWhole = findViewById<Button>(R.id.btnSubmitInterval2)
-        defaulSett = findViewById(R.id.btnDalej)
         val filter = IntentFilter("custom-message")
 
         LocalBroadcastManager.getInstance(this).registerReceiver(
@@ -79,13 +83,24 @@ class IntervalCountChooserActivity : AppCompatActivity() {
             filter
         )
 
-        defaulSett.setOnClickListener {
-            val intent = Intent(this, HeartBeatActivity::class.java)
-            val dataJson = ArrayListObjectParser.toJson(dataArray)
-            intent.putExtra("arrayIntervals", databaseHelper.lastRow().toString())
-            startActivity(intent)
+
+        show.setOnClickListener {
+
+            val data = databaseHelper.lastRow()
+
+            val gson = Gson()
+            var values = gson.fromJson(data, Array<CustomListElement>::class.java)
+
+            var str1 = ""
+
+            for (i in 0..values.size-1){
+                str1 += (i+1).toString() + ". " + values.get(i).duration.toString() + " sek \n"
+            }
 
 
+
+            AlertDialog.Builder(this).setTitle("Zapisane długości interwałów").
+            setMessage(str1).show()
         }
 
         submitInterval.setOnClickListener {
@@ -100,6 +115,8 @@ class IntervalCountChooserActivity : AppCompatActivity() {
             }
         }
 
+
+
         submitIntervalWhole.setOnClickListener {
             if(isAllow == "0"){
                 val toast = Toast.makeText(
@@ -108,10 +125,21 @@ class IntervalCountChooserActivity : AppCompatActivity() {
                 )
                 toast.show()
             }else{
-                val intent = Intent(this, HeartBeatActivity::class.java)
+
                 val dataJson = ArrayListObjectParser.toJson(dataArray)
-                intent.putExtra("arrayIntervals", dataJson)
-                startActivity(intent)
+
+                val insert: Boolean = databaseHelper!!.insert(dataJson.toString())
+
+                if(insert){
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                }
+                else{
+                    val toast = Toast.makeText(
+                        applicationContext, "Nie udało się zapisać ustawień", Toast.LENGTH_LONG
+                    )
+                    toast.show()
+                }
             }
         }
     }

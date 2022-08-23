@@ -68,10 +68,24 @@
             >
 
             <TextView
+                android:layout_width="72dp"
+                android:layout_height="match_parent"
+                android:layout_column="0"
+                android:layout_margin="1dp"
+                android:background="#E6E6E6"
+                android:gravity="center"
+                android:text="Interwał"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/naglowek"
+                android:textStyle="bold"
+
+                />
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Użytkownik "
+                android:text="User"
                 android:layout_margin="1dp"
                 android:layout_column="0"
                 android:background="#E6E6E6"
@@ -106,7 +120,7 @@
 
 
             <TextView
-                android:id="@+id/user"
+                android:id="@+id/interval"
                 android:layout_width="8dp"
                 android:layout_height="match_parent"
                 android:layout_column="0"
@@ -119,6 +133,20 @@
                 android:textColor="@color/primaryColor"
 
 
+                />
+
+            <TextView
+                android:id="@+id/user"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text=" Text"
+                android:layout_margin="1dp"
+                android:background="#E6E6E6"
+                android:textColor="@color/primaryColor"
+                android:gravity="center"
+                android:layout_column="1"
+                android:maxLines="50"
                 />
 
             <TextView

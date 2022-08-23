@@ -101,10 +101,12 @@ class HeartBeatActivity : AppCompatActivity() {
         buttonStart.setOnClickListener {
             isLogSaved = false
             running = true
+            buttonStart.visibility = View.INVISIBLE
         }
         var i = 0
 
         submit.setOnClickListener {
+            buttonStart.visibility = View.VISIBLE
             userRecord.add(Integer.parseInt(userText.text.toString()))
 //            userRecord.add(userText.text.toString())
             mCsvLogger!!.appendLine(
@@ -143,6 +145,8 @@ class HeartBeatActivity : AppCompatActivity() {
 
                 intent.putExtra("sensor", json1)
 
+                intent.putExtra("dataArray", data)
+
 
                 startActivity(intent)
 
@@ -164,6 +168,7 @@ class HeartBeatActivity : AppCompatActivity() {
 
     private fun enableEditText(editText: EditText) {
         userTextView.text = "Wpisz przewidywaną ilość uderzeń serca"
+
         userTextView.width = 700
         editText.isFocusableInTouchMode = true
         editText.isFocusable = true
