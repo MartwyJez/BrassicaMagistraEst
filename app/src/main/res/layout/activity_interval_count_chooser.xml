@@ -22,11 +22,11 @@
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etIntervalCount"
+        app:layout_constraintTop_toBottomOf="@+id/etCodePatient"
         app:layout_constraintVertical_bias="0.0" />
 
     <Button
-        android:id="@+id/btnSubmitInterval2"
+        android:id="@+id/btnSubmitCodes"
         android:layout_width="283dp"
         android:layout_height="72dp"
         android:background="@drawable/button2"
@@ -39,7 +39,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/listIntervals"
 
-        app:layout_constraintVertical_bias="0.6" />
+        app:layout_constraintVertical_bias="0.276" />
 
     <Button
         android:id="@+id/btnDalej"
@@ -57,17 +57,16 @@
         app:layout_constraintVertical_bias="0.991" />
 
     <EditText
-        android:id="@+id/etIntervalCount"
+        android:id="@+id/etCodePatient"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/primaryColor"
         android:ems="12"
-        android:inputType="textPersonName"
+        android:inputType="numberDecimal"
         android:hint="Ilość interwałów"
         android:textColorHint="@color/primaryColor"
         android:textAlignment="center"
         android:textColor="@color/primaryColor"
-
         android:typeface="sans"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -93,12 +92,12 @@
 
     <ListView
         android:id="@+id/listIntervals"
-        android:layout_width="245dp"
-        android:layout_height="201dp"
+        android:layout_width="247dp"
+        android:layout_height="263dp"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnSubmitInterval"
-        app:layout_constraintVertical_bias="0.192" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.493" />
 </androidx.constraintlayout.widget.ConstraintLayout>

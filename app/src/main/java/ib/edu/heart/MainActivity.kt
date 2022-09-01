@@ -33,6 +33,7 @@ import com.polar.sdk.api.model.PolarDeviceInfo
 import com.polar.sdk.api.model.PolarExerciseEntry
 import com.polar.sdk.api.model.PolarHrData
 import com.polar.sdk.api.model.PolarSensorSetting
+import ib.edu.heart.CodesChooserActivity
 import ib.edu.heart.HeartBeatActivity
 import ib.edu.heart.SettingsActivity
 
@@ -110,6 +111,7 @@ class MainActivity : AppCompatActivity() {
                 Log.d(TAG, "Połaczono z: " + polarDeviceInfo.deviceId)
                 deviceId = polarDeviceInfo.deviceId
                 deviceConnected = true
+                showToast("Nawiązano połączenie z czujnikiem")
                 val buttonText = getString(R.string.disconnect_from_device, deviceId)
                 toggleButtonDown(connectButton, buttonText)
             }
@@ -162,7 +164,7 @@ class MainActivity : AppCompatActivity() {
         connectButton.text = getString(R.string.connect_to_device, deviceId)
         connectButton.setOnClickListener {
 
-            val intent = Intent(this, IntervalCountChooserActivity::class.java)
+            val intent = Intent(this, CodesChooserActivity::class.java)
             startActivity(intent)
 
             try {
@@ -177,6 +179,10 @@ class MainActivity : AppCompatActivity() {
                 } else {
                     "połącz"
                 }
+
+                val toast = Toast.makeText(
+                    applicationContext, "Nieudane połączenie z czujnikiem.", Toast.LENGTH_LONG)
+                toast.show()
                 Log.e(TAG, "Nie udało się $attempt. Reason $polarInvalidArgument ")
             }
         }

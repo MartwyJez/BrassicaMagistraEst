@@ -1,13 +1,13 @@
 package ib.edu.heart
 
 import android.app.AlertDialog
-import android.app.Dialog
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
 import android.text.InputType
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ListView
@@ -71,11 +71,11 @@ class SettingsActivity : AppCompatActivity() {
 
         show = findViewById(R.id.btnShow)
 
-        etIntervals = findViewById(R.id.etIntervalCount)
+        etIntervals = findViewById(R.id.etCodePatient)
         setInputTypeNumber()
         listview = findViewById<ListView>(R.id.listIntervals)
         submitInterval = findViewById<Button>(R.id.btnSubmitInterval)
-        submitIntervalWhole = findViewById<Button>(R.id.btnSubmitInterval2)
+        submitIntervalWhole = findViewById<Button>(R.id.btnSubmitCodes)
         val filter = IntentFilter("custom-message")
 
         LocalBroadcastManager.getInstance(this).registerReceiver(
@@ -112,6 +112,8 @@ class SettingsActivity : AppCompatActivity() {
                 toast.show()
             } else {
                 getData()
+                submitInterval.visibility = View.INVISIBLE
+                etIntervals.visibility = View.INVISIBLE
             }
         }
 

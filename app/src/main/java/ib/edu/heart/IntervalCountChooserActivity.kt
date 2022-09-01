@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
 import android.text.InputType
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -64,15 +65,20 @@ class IntervalCountChooserActivity : AppCompatActivity() {
         setContentView(R.layout.activity_interval_count_chooser)
 
         databaseHelper = DatabaseHelper(this)
+        val codeSession:String = intent.getStringExtra("codeSession").toString()
+        val codePatient:String = intent.getStringExtra("codePatient").toString()
 
-        etIntervals = findViewById(R.id.etIntervalCount)
+        println("CODE SESSION: $codeSession, CODE PATIENT: $codePatient")
+        etIntervals = findViewById(R.id.etCodePatient)
         setInputTypeNumber()
         listview = findViewById<ListView>(R.id.listIntervals)
         txt  = findViewById(R.id.tvIntervalChoose)
         submitInterval = findViewById<Button>(R.id.btnSubmitInterval)
-        submitIntervalWhole = findViewById<Button>(R.id.btnSubmitInterval2)
+        submitIntervalWhole = findViewById<Button>(R.id.btnSubmitCodes)
         defaulSett = findViewById(R.id.btnDalej)
         val filter = IntentFilter("custom-message")
+        submitIntervalWhole.visibility = View.INVISIBLE
+
 
         LocalBroadcastManager.getInstance(this).registerReceiver(
             mMessageReceiver,
@@ -97,6 +103,10 @@ class IntervalCountChooserActivity : AppCompatActivity() {
                 toast.show()
             } else {
                 getData()
+                submitIntervalWhole.visibility = View.VISIBLE
+                submitInterval.visibility = View.INVISIBLE
+                etIntervals.visibility = View.INVISIBLE
+
             }
         }
 
@@ -111,6 +121,9 @@ class IntervalCountChooserActivity : AppCompatActivity() {
                 val intent = Intent(this, HeartBeatActivity::class.java)
                 val dataJson = ArrayListObjectParser.toJson(dataArray)
                 intent.putExtra("arrayIntervals", dataJson)
+                intent.putExtra("codeSession", codeSession)
+                intent.putExtra("codePatient", codePatient)
+
                 startActivity(intent)
             }
         }

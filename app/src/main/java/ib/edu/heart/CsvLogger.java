@@ -29,10 +29,13 @@ public class CsvLogger {
 
     private final StringBuilder mStringBuilder;
     public static final int REQUEST_WRITE_EXTERNAL_STORAGE_PERMISSION = 99;
-
+    private final String codeSession;
+    private final String codePatient;
     private boolean isHeaderExists = false;
 
-    public CsvLogger() {
+    public CsvLogger(String codeSession, String codePatient) {
+        this.codeSession = codeSession;
+        this.codePatient = codePatient;
         mStringBuilder = new StringBuilder();
     }
 
@@ -108,7 +111,9 @@ public class CsvLogger {
         String currentTimestamp = formatter.format(cal.getTime());
 
 
-        sb.append(currentTimestamp).append("_")
+        sb.append("PATIENT_")
+                .append(codePatient).append("_SESSION_").append(codeSession).append("_")
+                .append(currentTimestamp).append("_")
                 .append(tag);
 
         return sb.toString();

@@ -33,8 +33,6 @@ class HeartBeatActivity : AppCompatActivity() {
 
     private var userRecord = arrayListOf<Int>()
 
-   // private var userRecord = arrayListOf<String>()
-
     private val LOG_TAG: String = HeartBeatActivity::class.java.simpleName
 
     private lateinit var textView: TextView
@@ -68,16 +66,21 @@ class HeartBeatActivity : AppCompatActivity() {
         userText = findViewById(R.id.userHeartBeat)
         submit = findViewById(R.id.submitButton)
         userTextView = findViewById(R.id.userTextView)
-
-        mCsvLogger = CsvLogger()
         val data:String = intent.getStringExtra("arrayIntervals").toString()
+        val codeSession:String = intent.getStringExtra("codeSession").toString()
+        val codePatient:String = intent.getStringExtra("codePatient").toString()
+        println("CODE SESSION: $codeSession, CODE PATIENT: $codePatient")
+
+        mCsvLogger = CsvLogger(codeSession, codePatient)
+
+
         mCsvLogger!!.checkRuntimeWriteExternalStoragePermission(this, this)
         intervalsTable = ArrayListObjectParser.fromJson(data) as ArrayList<CustomListElement>
 
 
         disableEditText(userText)
 
-        mCsvLogger!!.appendHeader("Lp., Interval [ms], User expectations, Real EKG score")
+        mCsvLogger!!.appendHeader("Lp., Interval [s], User expectations, Real EKG score")
 
         api.setApiLogger { s: String -> Log.d(HeartBeatActivity.API_LOGGER_TAG, s) }
         api.setApiCallback(object : PolarBleApiCallback() {
@@ -208,14 +211,9 @@ class HeartBeatActivity : AppCompatActivity() {
                         enableEditText(userText)
 
                     }
-                }else{
-
-                    println("PRZEJDZ DO OKNA WYNIKOW")
                 }
 
-
             }
-
 
         }
 
