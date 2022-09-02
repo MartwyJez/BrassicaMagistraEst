@@ -89,6 +89,8 @@ class IntervalCountChooserActivity : AppCompatActivity() {
             val intent = Intent(this, HeartBeatActivity::class.java)
             val dataJson = ArrayListObjectParser.toJson(dataArray)
             intent.putExtra("arrayIntervals", databaseHelper.lastRow().toString())
+            intent.putExtra("codeSession", codeSession)
+            intent.putExtra("codePatient", codePatient)
             startActivity(intent)
 
 
