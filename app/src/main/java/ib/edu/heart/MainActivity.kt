@@ -27,15 +27,12 @@ import com.polar.sdk.api.PolarBleApiDefaultImpl
 import com.polar.sdk.api.errors.PolarInvalidArgument
 
 import com.polar.sdk.api.model.*
-import ib.edu.heart.IntervalCountChooserActivity
 
 import com.polar.sdk.api.model.PolarDeviceInfo
 import com.polar.sdk.api.model.PolarExerciseEntry
 import com.polar.sdk.api.model.PolarHrData
 import com.polar.sdk.api.model.PolarSensorSetting
-import ib.edu.heart.CodesChooserActivity
-import ib.edu.heart.HeartBeatActivity
-import ib.edu.heart.SettingsActivity
+import ib.edu.heart.*
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Flowable
@@ -50,6 +47,7 @@ import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var databaseHelper: DataBaseSensor
 
 
     companion object {
@@ -59,8 +57,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     // ATTENTION! Replace with the device ID from your device.
-    private var deviceId = "5D446327"
-
+    private var deviceId = ""
     var entries = ArrayList<Int>()
 
     private val api: PolarBleApi by lazy {
@@ -77,6 +74,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var connectButton: Button
     private lateinit var settButton: Button
+    private lateinit var sensorButton: Button
     private lateinit var textView: TextView
 
     private var liczba: Int = 0
@@ -88,7 +86,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         Log.d(TAG, "version: " + PolarBleApiDefaultImpl.versionInfo())
+
+        databaseHelper = DataBaseSensor(this)
+        deviceId = databaseHelper.lastRow().toString()
+
+
+
         connectButton = findViewById(R.id.connect_button)
+        sensorButton = findViewById(R.id.czujnik)
         settButton = findViewById(R.id.settings)
         textView = findViewById(R.id.textv2)
         api.setPolarFilter(false)
@@ -112,8 +117,6 @@ class MainActivity : AppCompatActivity() {
                 deviceId = polarDeviceInfo.deviceId
                 deviceConnected = true
                 showToast("Nawiązano połączenie z czujnikiem")
-                val buttonText = getString(R.string.disconnect_from_device, deviceId)
-                toggleButtonDown(connectButton, buttonText)
             }
 
             override fun deviceConnecting(polarDeviceInfo: PolarDeviceInfo) {
@@ -123,6 +126,7 @@ class MainActivity : AppCompatActivity() {
             @SuppressLint("StringFormatInvalid")
             override fun deviceDisconnected(polarDeviceInfo: PolarDeviceInfo) {
                 Log.d(TAG, "Rozłączono: " + polarDeviceInfo.deviceId)
+                showToast("Przerwano połączenie z czujnikiem")
                 deviceConnected = false
                 val buttonText = getString(R.string.connect_to_device, deviceId)
                 toggleButtonUp(connectButton, buttonText)
@@ -162,28 +166,40 @@ class MainActivity : AppCompatActivity() {
         })
 
         connectButton.text = getString(R.string.connect_to_device, deviceId)
+
+        sensorButton.setOnClickListener {
+            val intent = Intent(this, ChangeIDActivity::class.java)
+            startActivity(intent)
+        }
         connectButton.setOnClickListener {
 
-            val intent = Intent(this, CodesChooserActivity::class.java)
-            startActivity(intent)
+            if(deviceId.isNullOrEmpty()){
+                showToast("Nie uzupelniono ID czujnika")
+            }
+            else {
 
-            try {
-                if (deviceConnected) {
-                    api.disconnectFromDevice(deviceId)
-                } else {
-                    api.connectToDevice(deviceId)
-                }
-            } catch (polarInvalidArgument: PolarInvalidArgument) {
-                val attempt = if (deviceConnected) {
-                    "Rozłącz"
-                } else {
-                    "połącz"
-                }
+                val intent = Intent(this, CodesChooserActivity::class.java)
+                startActivity(intent)
 
-                val toast = Toast.makeText(
-                    applicationContext, "Nieudane połączenie z czujnikiem.", Toast.LENGTH_LONG)
-                toast.show()
-                Log.e(TAG, "Nie udało się $attempt. Reason $polarInvalidArgument ")
+                try {
+                    if (deviceConnected) {
+                        api.disconnectFromDevice(deviceId)
+                    } else {
+                        api.connectToDevice(deviceId)
+                    }
+                } catch (polarInvalidArgument: PolarInvalidArgument) {
+                    val attempt = if (deviceConnected) {
+                        "Rozłącz"
+                    } else {
+                        "połącz"
+                    }
+
+                    val toast = Toast.makeText(
+                        applicationContext, "Nieudane połączenie z czujnikiem.", Toast.LENGTH_LONG
+                    )
+                    toast.show()
+                    Log.e(TAG, "Nie udało się $attempt. Reason $polarInvalidArgument ")
+                }
             }
         }
 

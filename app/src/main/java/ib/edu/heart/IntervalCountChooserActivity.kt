@@ -88,10 +88,22 @@ class IntervalCountChooserActivity : AppCompatActivity() {
         defaulSett.setOnClickListener {
             val intent = Intent(this, HeartBeatActivity::class.java)
             val dataJson = ArrayListObjectParser.toJson(dataArray)
-            intent.putExtra("arrayIntervals", databaseHelper.lastRow().toString())
-            intent.putExtra("codeSession", codeSession)
-            intent.putExtra("codePatient", codePatient)
-            startActivity(intent)
+
+            val data = databaseHelper.lastRow()
+
+            if (data == null) {
+                val toast = Toast.makeText(
+                    applicationContext, "Brak zapisanych ustawień", Toast.LENGTH_LONG
+                )
+                toast.show()
+            }
+            else{
+                intent.putExtra("arrayIntervals", databaseHelper.lastRow().toString())
+                intent.putExtra("codeSession", codeSession)
+                intent.putExtra("codePatient", codePatient)
+                startActivity(intent)
+            }
+
 
 
         }

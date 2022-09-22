@@ -85,22 +85,29 @@ class SettingsActivity : AppCompatActivity() {
 
 
         show.setOnClickListener {
-
             val data = databaseHelper.lastRow()
 
-            val gson = Gson()
-            var values = gson.fromJson(data, Array<CustomListElement>::class.java)
+            if (data == null) {
+                val toast = Toast.makeText(
+                    applicationContext, "Brak zapisanych ustawień", Toast.LENGTH_LONG
+                )
+                toast.show()
+            } else {
 
-            var str1 = ""
+                val gson = Gson()
+                var values = gson.fromJson(data, Array<CustomListElement>::class.java)
 
-            for (i in 0..values.size-1){
-                str1 += (i+1).toString() + ". " + values.get(i).duration.toString() + " sek \n"
+                var str1 = ""
+
+                for (i in 0..values.size - 1) {
+                    str1 += (i + 1).toString() + ". " + values.get(i).duration.toString() + " sek \n"
+                }
+
+
+
+                AlertDialog.Builder(this).setTitle("Zapisane długości interwałów").setMessage(str1)
+                    .show()
             }
-
-
-
-            AlertDialog.Builder(this).setTitle("Zapisane długości interwałów").
-            setMessage(str1).show()
         }
 
         submitInterval.setOnClickListener {

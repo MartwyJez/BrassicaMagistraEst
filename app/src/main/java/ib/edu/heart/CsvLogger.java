@@ -111,8 +111,8 @@ public class CsvLogger {
         String currentTimestamp = formatter.format(cal.getTime());
 
 
-        sb.append("PATIENT_")
-                .append(codePatient).append("_SESSION_").append(codeSession).append("_")
+        sb.append("P_")
+                .append(codePatient).append("_S_").append(codeSession).append("_")
                 .append(currentTimestamp).append("_")
                 .append(tag);
 

@@ -38,6 +38,12 @@ tools:context="edu.ib.polar2.MainActivity">
         android:text="Opcje interwałów" />
 
 
+    <Button
+        android:id="@+id/czujnik"
+        android:layout_width="273dp"
+        android:layout_height="wrap_content"
+        android:text="Zmiana czujnika" />
+
 
     <TextView
         android:layout_width="match_parent"

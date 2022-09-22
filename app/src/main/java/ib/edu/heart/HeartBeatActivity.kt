@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.GsonBuilder
@@ -41,6 +42,8 @@ class HeartBeatActivity : AppCompatActivity() {
     private lateinit var userText: EditText
     private lateinit var submit: Button
 
+    private var badValues = 0
+
 
     companion object {
         private const val TAG = "HeartBeatActivity"
@@ -61,6 +64,7 @@ class HeartBeatActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.heart_beat_activity)
+
         textView =findViewById(R.id.status)
         buttonStart = findViewById(R.id.start_button)
         userText = findViewById(R.id.userHeartBeat)
@@ -87,6 +91,22 @@ class HeartBeatActivity : AppCompatActivity() {
 
             override fun hrNotificationReceived(identifier: String, data: PolarHrData) {
                 Log.d(TAG, "HR wartosć: ${data.hr} rrsMs: ${data.rrsMs} rr: ${data.rrs} contact: ${data.contactStatus} , ${data.contactStatusSupported}")
+
+                if(data.rrs.size == 0){
+                    badValues += 1
+
+                }
+
+                if(badValues >= 3){
+
+                    val toast = Toast.makeText(
+                        applicationContext, "Należy upewnić się, czy czujnik jest podłączony prawidłowo!", Toast.LENGTH_LONG
+                    )
+                    toast.show()
+
+                    badValues = 0
+                }
+
                 if(running){
                     heartBeat += data.rrs.size
                 }
@@ -109,50 +129,70 @@ class HeartBeatActivity : AppCompatActivity() {
         var i = 0
 
         submit.setOnClickListener {
-            buttonStart.visibility = View.VISIBLE
-            userRecord.add(Integer.parseInt(userText.text.toString()))
-//            userRecord.add(userText.text.toString())
-            mCsvLogger!!.appendLine(
-                String.format(
-                    Locale.getDefault(),
-                    "%s,%s,%s,%s", (i + 1).toString(), intervalsTable.get(i).duration.toString(), userRecord[i].toString(),
-                    sensorRecord[i].toString()
+            if(userText.text.isEmpty()){
+                val toast = Toast.makeText(
+                    applicationContext, "Należy wpisać ilość udrzeń serca", Toast.LENGTH_LONG
                 )
-            )
-            i++
-            if(intervals == intervalsTable.size) {
-                if (!isLogSaved) {
-                    mCsvLogger!!.finishSavingLogs(this, LOG_TAG)
-                    isLogSaved = true
-                }
+                toast.show()
             }
-            disableEditText(userText)
-            userText.text.clear()
+            else {
+                textView.text = "Wystartuj kolejny interwał"
+                buttonStart.visibility = View.VISIBLE
+                userRecord.add(Integer.parseInt(userText.text.toString()))
+//            userRecord.add(userText.text.toString())
+                mCsvLogger!!.appendLine(
+                    String.format(
+                        Locale.getDefault(),
+                        "%s,%s,%s,%s",
+                        (i + 1).toString(),
+                        intervalsTable.get(i).duration.toString(),
+                        userRecord[i].toString(),
+                        sensorRecord[i].toString()
+                    )
+                )
+                i++
+                if (intervals == intervalsTable.size) {
+                    if (!isLogSaved) {
+                        mCsvLogger!!.finishSavingLogs(this, LOG_TAG)
+                        isLogSaved = true
+                    }
+                }
+                disableEditText(userText)
+                userText.text.clear()
 
-            intent = Intent(this, Data::class.java)
+                intent = Intent(this, Data::class.java)
 
-            if (userRecord.size == intervalsTable.size){
-                val gson = GsonBuilder()
-                    .excludeFieldsWithModifiers(Modifier.FINAL, Modifier.TRANSIENT, Modifier.STATIC)
-                    .serializeNulls()
-                    .create()
-                val json = gson.toJson(userRecord)
+                if (userRecord.size == intervalsTable.size) {
+                    val gson = GsonBuilder()
+                        .excludeFieldsWithModifiers(
+                            Modifier.FINAL,
+                            Modifier.TRANSIENT,
+                            Modifier.STATIC
+                        )
+                        .serializeNulls()
+                        .create()
+                    val json = gson.toJson(userRecord)
 
-                intent.putExtra("user", json)
+                    intent.putExtra("user", json)
 
-                val gson1 = GsonBuilder()
-                    .excludeFieldsWithModifiers(Modifier.FINAL, Modifier.TRANSIENT, Modifier.STATIC)
-                    .serializeNulls()
-                    .create()
-                val json1 = gson1.toJson(sensorRecord)
+                    val gson1 = GsonBuilder()
+                        .excludeFieldsWithModifiers(
+                            Modifier.FINAL,
+                            Modifier.TRANSIENT,
+                            Modifier.STATIC
+                        )
+                        .serializeNulls()
+                        .create()
+                    val json1 = gson1.toJson(sensorRecord)
 
-                intent.putExtra("sensor", json1)
+                    intent.putExtra("sensor", json1)
 
-                intent.putExtra("dataArray", data)
+                    intent.putExtra("dataArray", data)
 
 
-                startActivity(intent)
+                    startActivity(intent)
 
+                }
             }
         }
 
@@ -171,7 +211,7 @@ class HeartBeatActivity : AppCompatActivity() {
 
     private fun enableEditText(editText: EditText) {
         userTextView.text = "Wpisz przewidywaną ilość uderzeń serca"
-
+        userTextView.textAlignment = View.TEXT_ALIGNMENT_CENTER
         userTextView.width = 700
         editText.isFocusableInTouchMode = true
         editText.isFocusable = true
@@ -207,7 +247,7 @@ class HeartBeatActivity : AppCompatActivity() {
                         sensorRecord.add(heartBeat)
                         println(sensorRecord.toString())
                         heartBeat = 0
-                        textView.text = "Interwał zakończony. Wpisz ilość uderzeń serca i wystartuj kolejny interwał"
+                        textView.text = "Interwał zakończony. Wpisz ilość uderzeń serca"
                         enableEditText(userText)
 
                     }
