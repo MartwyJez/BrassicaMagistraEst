@@ -15,7 +15,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.gson.Gson
-import com.polar.androidblesdk.R
 import edu.ib.heart.MainActivity
 
 
@@ -98,15 +97,23 @@ class SettingsActivity : AppCompatActivity() {
                 var values = gson.fromJson(data, Array<CustomListElement>::class.java)
 
                 var str1 = ""
+                if(values == null){
+                    val toast = Toast.makeText(
+                        applicationContext, "Na tym urządzeniu nie ma jeszcze żadnych zapisanych" +
+                                " ustawień interwałów.", Toast.LENGTH_LONG
+                    )
+                    toast.show()
+                }else {
+                    for (i in 0..values.size - 1) {
+                        str1 += (i + 1).toString() + ". " + values.get(i).duration.toString() + " sek \n"
+                    }
 
-                for (i in 0..values.size - 1) {
-                    str1 += (i + 1).toString() + ". " + values.get(i).duration.toString() + " sek \n"
+
+
+                    AlertDialog.Builder(this).setTitle("Zapisane długości interwałów")
+                        .setMessage(str1)
+                        .show()
                 }
-
-
-
-                AlertDialog.Builder(this).setTitle("Zapisane długości interwałów").setMessage(str1)
-                    .show()
             }
         }
 

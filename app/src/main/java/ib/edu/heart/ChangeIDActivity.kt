@@ -12,7 +12,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.gson.Gson
-import com.polar.androidblesdk.R
 import edu.ib.heart.MainActivity
 
 class ChangeIDActivity: AppCompatActivity() {

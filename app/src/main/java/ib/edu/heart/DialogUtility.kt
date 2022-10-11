@@ -1,4 +1,4 @@
-package com.polar.androidblesdk
+package ib.edu.heart
 
 import android.app.Activity
 import android.app.Dialog

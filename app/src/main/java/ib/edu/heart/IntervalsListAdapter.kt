@@ -12,7 +12,6 @@ import android.widget.*
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.polar.androidblesdk.R
 import java.lang.reflect.Modifier
 
 

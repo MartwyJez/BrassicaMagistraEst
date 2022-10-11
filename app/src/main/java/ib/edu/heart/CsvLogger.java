@@ -14,8 +14,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.polar.androidblesdk.R;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;

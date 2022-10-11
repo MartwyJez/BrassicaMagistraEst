@@ -27,11 +27,11 @@ class Data: AppCompatActivity() {
     @SuppressLint("StringFormatInvalid")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(com.polar.androidblesdk.R.layout.data)
+        setContentView(ib.edu.heart.R.layout.data)
 
-        val tl = findViewById<View>(com.polar.androidblesdk.R.id.table) as TableLayout
+        val tl = findViewById<View>(ib.edu.heart.R.id.table) as TableLayout
         tl.visibility =  View.INVISIBLE
-        resetBtn = findViewById(com.polar.androidblesdk.R.id.reset)
+        resetBtn = findViewById(ib.edu.heart.R.id.reset)
 
         val ok:String = intent.getStringExtra("user").toString()
         val data:String = intent.getStringExtra("sensor").toString()
@@ -52,10 +52,10 @@ class Data: AppCompatActivity() {
 
 
 
-        interval = findViewById(com.polar.androidblesdk.R.id.interval)
-        dataBtn = findViewById(com.polar.androidblesdk.R.id.viewTable)
-        user = findViewById(com.polar.androidblesdk.R.id.user)
-        sensor = findViewById(com.polar.androidblesdk.R.id.sensor)
+        interval = findViewById(ib.edu.heart.R.id.interval)
+        dataBtn = findViewById(ib.edu.heart.R.id.viewTable)
+        user = findViewById(ib.edu.heart.R.id.user)
+        sensor = findViewById(ib.edu.heart.R.id.sensor)
 
         dataBtn.setOnClickListener {
 

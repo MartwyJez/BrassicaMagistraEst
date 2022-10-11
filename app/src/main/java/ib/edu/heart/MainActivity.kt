@@ -4,32 +4,19 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
-import androidx.annotation.StringRes
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.drawable.DrawableCompat
-import androidx.core.util.Pair
-import com.google.android.material.snackbar.Snackbar
-import com.opencsv.CSVWriter
-import com.polar.androidblesdk.DialogUtility
-import com.polar.androidblesdk.R
 import com.polar.sdk.api.PolarBleApi
 import com.polar.sdk.api.PolarBleApi.DeviceStreamingFeature
 import com.polar.sdk.api.PolarBleApiCallback
 import com.polar.sdk.api.PolarBleApiDefaultImpl
 import com.polar.sdk.api.errors.PolarInvalidArgument
-
-import com.polar.sdk.api.model.*
-
 import com.polar.sdk.api.model.PolarDeviceInfo
-import com.polar.sdk.api.model.PolarExerciseEntry
 import com.polar.sdk.api.model.PolarHrData
 import com.polar.sdk.api.model.PolarSensorSetting
 import ib.edu.heart.*
@@ -37,11 +24,8 @@ import ib.edu.heart.*
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Single
-import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.functions.Function
-import java.io.File
-import java.io.FileWriter
-import java.io.IOException
+
 import java.util.*
 
 
@@ -58,19 +42,14 @@ class MainActivity : AppCompatActivity() {
 
     // ATTENTION! Replace with the device ID from your device.
     private var deviceId = ""
-    var entries = ArrayList<Int>()
 
     private val api: PolarBleApi by lazy {
         // Notice PolarBleApi.ALL_FEATURES are enabled
         PolarBleApiDefaultImpl.defaultImplementation(applicationContext, PolarBleApi.ALL_FEATURES)
     }
-    private var recordingStartStopDisposable: Disposable? = null
-    private var recordingStatusReadDisposable: Disposable? = null
-
 
     private var deviceConnected = false
     private var bluetoothEnabled = false
-    private var exerciseEntries: MutableList<PolarExerciseEntry> = mutableListOf()
 
     private lateinit var connectButton: Button
     private lateinit var settButton: Button
@@ -211,17 +190,7 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    requestPermissions(arrayOf(Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_CONNECT), PERMISSION_REQUEST_CODE)
-                } else {
-                    requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), PERMISSION_REQUEST_CODE)
-                }
-            } else {
-                requestPermissions(arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION), PERMISSION_REQUEST_CODE)
-            }
-        }
+        requestPermissions(arrayOf(Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_CONNECT), PERMISSION_REQUEST_CODE)
     }
 
 
@@ -299,21 +268,10 @@ class MainActivity : AppCompatActivity() {
         api.shutDown()
     }
 
-    private fun toggleButtonDown(button: Button, text: String? = null) {
-        toggleButton(button, true, text)
-    }
-
-    private fun toggleButtonDown(button: Button, @StringRes resourceId: Int) {
-        toggleButton(button, true, getString(resourceId))
-    }
-
     private fun toggleButtonUp(button: Button, text: String? = null) {
         toggleButton(button, false, text)
     }
 
-    private fun toggleButtonUp(button: Button, @StringRes resourceId: Int) {
-        toggleButton(button, false, getString(resourceId))
-    }
 
     private fun toggleButton(button: Button, isDown: Boolean, text: String? = null) {
         if (text != null) button.text = text
@@ -331,22 +289,6 @@ class MainActivity : AppCompatActivity() {
         val toast = Toast.makeText(applicationContext, message, Toast.LENGTH_LONG)
         toast.show()
 
-    }
-
-    private fun showSnackbar(message: String) {
-        val contextView = findViewById<View>(R.id.buttons_container)
-        Snackbar.make(contextView, message, Snackbar.LENGTH_LONG)
-            .show()
-    }
-
-    private fun showDialog(title: String, message: String) {
-        AlertDialog.Builder(this)
-            .setTitle(title)
-            .setMessage(message)
-            .setPositiveButton("OK") { _, _ ->
-                // Respond to positive button press
-            }
-            .show()
     }
 
     private fun disableAllButtons() {

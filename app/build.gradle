@@ -2,12 +2,10 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 android {
-    namespace 'com.polar.androidblesdk'
-    compileSdk 32
+    namespace 'ib.edu.heart'
+    compileSdk 31
     defaultConfig {
-        applicationId "com.polar.androidblesdk"
-        minSdk 24
-        targetSdk 32
+        applicationId "ib.edu.heart"
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
@@ -20,12 +18,15 @@ android {
     }
 
     defaultConfig {
+
+        minSdk 24
+        targetSdk 31
         multiDexEnabled true
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
 }
 
