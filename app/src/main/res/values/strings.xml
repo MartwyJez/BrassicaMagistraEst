@@ -22,4 +22,6 @@
     <string name="write_external_storage_permission_text">Saving files required Write External Storage Permission</string>
     <string name="btn_ok">OK</string>
     <string name="tvCodeChoose">Wpisz kod pacjenta i sesji:</string>
+    <string name="device_status">ID: %1$s Status: %2$s</string>
+    <string name="device_status_not_initialized">Sensor is not connected.</string>
 </resources>

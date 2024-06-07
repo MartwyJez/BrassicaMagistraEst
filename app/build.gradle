@@ -7,7 +7,7 @@ android {
     defaultConfig {
         applicationId "ib.edu.heart"
         versionCode 1
-        versionName "1.0"
+        versionName "1.1"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
     buildTypes {
@@ -16,6 +16,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
 
     defaultConfig {
 

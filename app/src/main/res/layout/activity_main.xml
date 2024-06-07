@@ -1,58 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:background="@drawable/backgroundnawszystko">
-tools:context="edu.ib.polar2.MainActivity">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scrollView2"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/backgroundnawszystko"
+    tools:context="edu.ib.heart.MainActivity">
 
-<LinearLayout
-
-
-    android:id="@+id/buttons_container"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginLeft="10dp"
-    android:layout_marginRight="10dp"
-    android:layout_gravity="center"
-    android:orientation="vertical">
 
     <TextView
+        android:id="@+id/textView2"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="center_horizontal"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="136dp"
         android:text="POLAR HEART APP"
         android:textColor="#d45f73"
-        android:textSize="30dp" />
+        android:textSize="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
 
     <Button
-        android:id="@+id/connect_button"
-        android:layout_width="273dp"
+        android:id="@+id/start_all_button"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Rozpocznij badanie" />
+        android:layout_marginTop="48dp"
+        android:text="Rozpocznij badanie"
+        app:layout_constraintEnd_toEndOf="@+id/textView2"
+        app:layout_constraintStart_toStartOf="@+id/textView2"
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
     <Button
         android:id="@+id/settings"
-        android:layout_width="273dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Opcje interwałów" />
-
+        android:layout_marginTop="20dp"
+        android:text="Opcje interwałów"
+        app:layout_constraintEnd_toEndOf="@+id/start_all_button"
+        app:layout_constraintHorizontal_bias="0.545"
+        app:layout_constraintStart_toStartOf="@+id/start_all_button"
+        app:layout_constraintTop_toBottomOf="@+id/start_all_button" />
 
     <Button
         android:id="@+id/czujnik"
-        android:layout_width="273dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Zmiana czujnika" />
-
+        android:layout_marginTop="20dp"
+        android:text="Zmiana czujnika"
+        app:layout_constraintEnd_toEndOf="@+id/settings"
+        app:layout_constraintStart_toStartOf="@+id/settings"
+        app:layout_constraintTop_toBottomOf="@+id/settings" />
 
     <TextView
-        android:layout_width="match_parent"
+        android:id="@+id/sensor_status"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textv2"
-        android:text=""
-        android:textSize="20dp"
-        />
+        android:layout_marginBottom="16dp"
+        android:background="@color/colorLight"
+        android:elegantTextHeight="false"
+        android:fontFamily="sans-serif"
+        android:textAlignment="viewStart"
+        android:textColor="@color/secondaryColor"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/disconnect_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
+        android:text="Rozłącz"
+        app:layout_constraintBottom_toBottomOf="@id/sensor_status"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/connect_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="Połącz"
+        app:layout_constraintBottom_toTopOf="@+id/disconnect_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
-</LinearLayout>
-</ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

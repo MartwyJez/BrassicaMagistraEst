@@ -2,8 +2,10 @@ package edu.ib.heart
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.bluetooth.BluetoothAdapter
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -11,31 +13,42 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.drawable.DrawableCompat
+import androidx.core.view.isVisible
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import com.polar.sdk.api.PolarBleApi
 import com.polar.sdk.api.PolarBleApi.DeviceStreamingFeature
 import com.polar.sdk.api.PolarBleApiCallback
 import com.polar.sdk.api.PolarBleApiDefaultImpl
-import com.polar.sdk.api.errors.PolarInvalidArgument
 import com.polar.sdk.api.model.PolarDeviceInfo
 import com.polar.sdk.api.model.PolarHrData
 import com.polar.sdk.api.model.PolarSensorSetting
-import ib.edu.heart.*
-
+import ib.edu.heart.ChangeIDActivity
+import ib.edu.heart.CodesChooserActivity
+import ib.edu.heart.DataBaseSensor
+import ib.edu.heart.DialogUtility
+import ib.edu.heart.R
+import ib.edu.heart.SettingsActivity
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.functions.Function
-
-import java.util.*
+import java.util.UUID
 
 
 class MainActivity : AppCompatActivity() {
 
+    enum class DeviceStatus {
+        DISCONNECTED,
+        CONNECTING,
+        CONNECTED,
+        READY
+    }
+
     private lateinit var databaseHelper: DataBaseSensor
 
-
     companion object {
-        private const val TAG = "MainActivity"
+        private const val TAG = "q"
         private const val API_LOGGER_TAG = "API LOGGER"
         private const val PERMISSION_REQUEST_CODE = 1
     }
@@ -48,13 +61,14 @@ class MainActivity : AppCompatActivity() {
         PolarBleApiDefaultImpl.defaultImplementation(applicationContext, PolarBleApi.ALL_FEATURES)
     }
 
-    private var deviceConnected = false
-    private var bluetoothEnabled = false
-
-    private lateinit var connectButton: Button
+    private lateinit var startButton: Button
     private lateinit var settButton: Button
     private lateinit var sensorButton: Button
-    private lateinit var textView: TextView
+    private lateinit var connectButton: Button
+    private lateinit var disconnectButton: Button
+    private lateinit var sensorStatus: TextView
+
+    private lateinit var statusLiveData: MutableLiveData<DeviceStatus>
 
     private var liczba: Int = 0
     private var nagrywaj: String = ""
@@ -69,46 +83,44 @@ class MainActivity : AppCompatActivity() {
         databaseHelper = DataBaseSensor(this)
         deviceId = databaseHelper.lastRow().toString()
 
-
-
-        connectButton = findViewById(R.id.connect_button)
+        startButton = findViewById(R.id.start_all_button)
         sensorButton = findViewById(R.id.czujnik)
         settButton = findViewById(R.id.settings)
-        textView = findViewById(R.id.textv2)
+        connectButton = findViewById(R.id.connect_button)
+        disconnectButton = findViewById(R.id.disconnect_button)
+        sensorStatus = findViewById(R.id.sensor_status)
+        sensorStatus.setText(getString(R.string.device_status_not_initialized))
+
+        statusLiveData = MutableLiveData(DeviceStatus.DISCONNECTED)
+
+        statusLiveData.observe(this, Observer{
+            stat -> updateStatus(stat)
+        })
+
         api.setPolarFilter(false)
         api.setApiLogger { s: String -> Log.d(API_LOGGER_TAG, s) }
         api.setApiCallback(object : PolarBleApiCallback() {
             override fun blePowerStateChanged(powered: Boolean) {
                 Log.d(TAG, "BLE power: $powered")
-                bluetoothEnabled = powered
-                if (powered) {
-                    enableAllButtons()
-                    showToast("Włączony Bluetooth na telefonie")
-                } else {
-                    disableAllButtons()
-                    showToast("Wyłączony Bluetooth na telefonie")
-                }
+                isBluetoothOn()
             }
 
             @SuppressLint("StringFormatInvalid")
             override fun deviceConnected(polarDeviceInfo: PolarDeviceInfo) {
                 Log.d(TAG, "Połaczono z: " + polarDeviceInfo.deviceId)
                 deviceId = polarDeviceInfo.deviceId
-                deviceConnected = true
-                showToast("Nawiązano połączenie z czujnikiem")
+                statusLiveData.postValue(DeviceStatus.CONNECTED)
             }
 
             override fun deviceConnecting(polarDeviceInfo: PolarDeviceInfo) {
                 Log.d(TAG, "Łączenie z: " + polarDeviceInfo.deviceId)
+                statusLiveData.postValue(DeviceStatus.CONNECTING)
             }
 
             @SuppressLint("StringFormatInvalid")
             override fun deviceDisconnected(polarDeviceInfo: PolarDeviceInfo) {
                 Log.d(TAG, "Rozłączono: " + polarDeviceInfo.deviceId)
-                showToast("Przerwano połączenie z czujnikiem")
-                deviceConnected = false
-                val buttonText = getString(R.string.connect_to_device, deviceId)
-                toggleButtonUp(connectButton, buttonText)
+                statusLiveData.postValue(DeviceStatus.DISCONNECTED)
             }
 
             override fun streamingFeaturesReady(
@@ -121,7 +133,7 @@ class MainActivity : AppCompatActivity() {
 
             override fun hrFeatureReady(identifier: String) {
                 Log.d(TAG, "HR gotowe: $identifier")
-                // hr notifications are about to start
+                statusLiveData.postValue(DeviceStatus.READY)
             }
 
             override fun disInformationReceived(identifier: String, uuid: UUID, value: String) {
@@ -144,53 +156,45 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        connectButton.text = getString(R.string.connect_to_device, deviceId)
+        if (deviceId.isNotEmpty()) {
+            api.connectToDevice(deviceId)
+        }
 
         sensorButton.setOnClickListener {
             val intent = Intent(this, ChangeIDActivity::class.java)
             startActivity(intent)
         }
-        connectButton.setOnClickListener {
 
-            if(deviceId.isNullOrEmpty()){
-                showToast("Nie uzupelniono ID czujnika")
-            }
-            else {
-
-                val intent = Intent(this, CodesChooserActivity::class.java)
-                startActivity(intent)
-
-                try {
-                    if (deviceConnected) {
-                        api.disconnectFromDevice(deviceId)
-                    } else {
-                        api.connectToDevice(deviceId)
-                    }
-                } catch (polarInvalidArgument: PolarInvalidArgument) {
-                    val attempt = if (deviceConnected) {
-                        "Rozłącz"
-                    } else {
-                        "połącz"
-                    }
-
-                    val toast = Toast.makeText(
-                        applicationContext, "Nieudane połączenie z czujnikiem.", Toast.LENGTH_LONG
-                    )
-                    toast.show()
-                    Log.e(TAG, "Nie udało się $attempt. Reason $polarInvalidArgument ")
-                }
-            }
+        startButton.setOnClickListener {
+            val intent = Intent(this, CodesChooserActivity::class.java)
+            startActivity(intent)
         }
 
         settButton.setOnClickListener {
-
             val intent = Intent(this, SettingsActivity::class.java)
             startActivity(intent)
-
         }
 
+        connectButton.setOnClickListener {
+            isBluetoothOn()
+            if (deviceId.isNotEmpty()) {
+                api.connectToDevice(deviceId)
+            }
+            else {
+                showToast("Nie podano ID czujnika")
+            }
+        }
 
-        requestPermissions(arrayOf(Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_CONNECT), PERMISSION_REQUEST_CODE)
+        disconnectButton.setOnClickListener {
+            api.disconnectFromDevice(deviceId)
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            requestPermissions(arrayOf(Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_CONNECT), PERMISSION_REQUEST_CODE)
+        } else {
+            requestPermissions(arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION), PERMISSION_REQUEST_CODE)
+        }
+        isBluetoothOn()
     }
 
 
@@ -199,14 +203,12 @@ class MainActivity : AppCompatActivity() {
         if (requestCode == PERMISSION_REQUEST_CODE) {
             for (index in 0..grantResults.lastIndex) {
                 if (grantResults[index] == PackageManager.PERMISSION_DENIED) {
-                    disableAllButtons()
                     Log.w(TAG, "Brak wystarczających uprawnień")
                     showToast("Brak wystarczających uprawnień")
                     return
                 }
             }
             Log.d(TAG, "Potrzebne uprawnienia są przyznawane")
-            enableAllButtons()
         }
     }
 
@@ -260,7 +262,11 @@ class MainActivity : AppCompatActivity() {
 
     public override fun onResume() {
         super.onResume()
-        api.foregroundEntered()
+        if (deviceId.isNotEmpty()) {
+            api.disconnectFromDevice(deviceId)
+            Thread.sleep(1_000)
+            api.connectToDevice(deviceId)
+        }
     }
 
     public override fun onDestroy() {
@@ -285,23 +291,34 @@ class MainActivity : AppCompatActivity() {
         }
         button.background = buttonDrawable
     }
+
     private fun showToast(message: String) {
         val toast = Toast.makeText(applicationContext, message, Toast.LENGTH_LONG)
         toast.show()
-
     }
 
-    private fun disableAllButtons() {
-        connectButton.isEnabled = false
-
-
+    private fun updateStatus(status: DeviceStatus) {
+        val stat = when (status) {
+            DeviceStatus.CONNECTING -> "connecting..."
+            DeviceStatus.CONNECTED -> "connected"
+            DeviceStatus.DISCONNECTED -> "disconnected"
+            DeviceStatus.READY -> "ready"
+        }
+        sensorStatus.setText(getString(R.string.device_status, deviceId, stat))
+        if (statusLiveData.value == DeviceStatus.READY) {
+            startButton.isEnabled = true
+            startButton.isVisible = true
+        } else {
+            startButton.isEnabled = false
+            startButton.isVisible = true
+        }
     }
 
-    private fun enableAllButtons() {
-        connectButton.isEnabled = true
-
+    private fun isBluetoothOn(): Boolean {
+        val stat = BluetoothAdapter.getDefaultAdapter().isEnabled()
+        if (!stat) {
+            showToast("Bluetooth jest wyłączony")
+        }
+        return stat
     }
-    private fun disposeAllStreams() {
-       }
-
 }
